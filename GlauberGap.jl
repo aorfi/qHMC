@@ -14,6 +14,7 @@ end
 function accept_prob(N, beta, config,spin)
     spin_forward = spin + 1
     spin_back = spin - 1
+    #PBC
     if spin == N
         spin_forward = 1
     end
@@ -44,7 +45,7 @@ function mixing(N, beta)
 end
 
 
-beta = 10
+beta = 6
 N_values = (2:15)
 N_max = last(N_values)
 gap_all = zeros(length(N_values))
@@ -55,4 +56,17 @@ for j in (1:length(N_values))
     e,v  = eigs(M, nev = 2, which=:LR)
     gap_all[j] = abs(e[1]-e[2])
 end
-save_object("Data/gapBeta10", gap_all)
+save_object("Data/gapBeta6", gap_all)
+
+# N = 10
+# temp = 10 .^ (range(-2.5,stop=2.5,length=50))
+# beta_values = 1 ./ temp
+# gap_all = zeros(length(beta_values))
+# for j in (1:length(beta_values))
+#     beta = beta_values[j]
+#     println(" Working on beta = ",beta)
+#     M = mixing(N,beta)
+#     e,v  = eigs(M, nev = 2, which=:LR)
+#     gap_all[j] = abs(e[1]-e[2])
+# end
+# save_object("Data/gapN10", gap_all)
