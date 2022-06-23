@@ -23,7 +23,7 @@ function accept_prob(N, beta, config,spin)
     end
     p_top = exp(-beta*sigma_z(N,config,spin)*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)))
     p_bot = exp(-beta*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)))+exp(beta*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)))
-    return p_top/(N*p_bot)
+    return p_top/p_bot
 end
 
 function mixing(N, beta)
@@ -36,27 +36,29 @@ function mixing(N, beta)
         for SpinIndex in (0:N-1)
             bit = Int(2)^(SpinIndex)
             bra = ket ⊻ bit
-            M[bra+1,ket+1] += accept_prob(N, beta, bra,SpinIndex+1)
-            p_sum += accept_prob(N, beta, ket,SpinIndex+1)
+            # Sigma_x term
+            M[bra+1,ket+1] = (1/N)*accept_prob(N, beta, bra,SpinIndex+1)
+            p_sum += (1/N)*accept_prob(N, beta, ket,SpinIndex+1)
         end
+        # Diagonal term
         M[ket+1,ket+1] += 1-p_sum
     end
     return M |> sparse
 end
 
 
-beta = 6
-N_values = (2:15)
-N_max = last(N_values)
-gap_all = zeros(length(N_values))
-for j in (1:length(N_values))
-    N = N_values[j]
-    println(" Working on N = ",N)
-    M = mixing(N,beta)
-    e,v  = eigs(M, nev = 2, which=:LR)
-    gap_all[j] = abs(e[1]-e[2])
-end
-save_object("Data/gapBeta6", gap_all)
+# beta = 6
+# N_values = (2:15)
+# N_max = last(N_values)
+# gap_all = zeros(length(N_values))
+# for j in (1:length(N_values))
+#     N = N_values[j]
+#     println(" Working on N = ",N)
+#     M = mixing(N,beta)
+#     e,v  = eigs(M, nev = 2, which=:LR)
+#     gap_all[j] = abs(e[1]-e[2])
+# end
+# save_object("Data/gapBeta6", gap_all)
 
 # N = 10
 # temp = 10 .^ (range(-2.5,stop=2.5,length=50))
