@@ -3,15 +3,13 @@ using SparseArrays
 using Arpack
 using JLD2
 
-
-
 function sigma_z(N, config, spin)
     # config is in [0,2^N] and spin in [1,N]
     spin_index = spin -1
     return 2*((config>>spin_index)&1)-1
 end
 
-function accept_prob(N, beta, config,spin)
+function accept_prob_matrix(N, beta, config,spin)
     spin_forward = spin + 1
     spin_back = spin - 1
     #PBC
@@ -26,7 +24,7 @@ function accept_prob(N, beta, config,spin)
     return p_top/p_bot
 end
 
-function mixing(N, beta)
+function mixing_local(N, beta)
     dim = (2)^N
     M = zeros(dim,dim)
     for ket in (0:dim-1)
