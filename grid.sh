@@ -2,4 +2,4 @@
 #SBATCH --mem-per-cpu=1024M
 #SBATCH --time=08:00:00
 
-julia --project=/home/aorfi/projects/def-raymond/aorfi/qHMC/qHMC_env ParamterSearch.jl
+julia --project=/home/aorfi/projects/def-raymond/aorfi/qHMC/qHMC_env ParameterSearch.jl
