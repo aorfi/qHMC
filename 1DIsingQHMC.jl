@@ -135,4 +135,16 @@ end
 # save_object("Data/gamma0.75t8gapN10", gap_all)
 
 
+# beta = 300
+# N_values = (2:13)
+# gap_all = zeros(length(N_values))
+# for j in (1:length(N_values))
+#     N = N_values[j]
+#     println(" Working on N = ",N)
+#     M = mixing(N,beta)
+#     e,v  = eigen(M)
+#     gap_all[j] = abs(e[end]-e[end-1])
+#     print("Gap: ",abs(e[end]-e[end-1]))
+# end
+# save_object("Data/GqHMCBeta300", gap_all)
 

@@ -9,7 +9,7 @@ function sigma_z(N, config, spin)
     return 2*((config>>spin_index)&1)-1
 end
 
-function accept_prob_matrix(N, beta, config,spin)
+function accept_prob(N, beta, config,spin)
     spin_forward = spin + 1
     spin_back = spin - 1
     #PBC
@@ -24,7 +24,7 @@ function accept_prob_matrix(N, beta, config,spin)
     return p_top/p_bot
 end
 
-function mixing_local(N, beta)
+function mixing(N, beta)
     dim = (2)^N
     M = zeros(dim,dim)
     for ket in (0:dim-1)
@@ -43,7 +43,6 @@ function mixing_local(N, beta)
     end
     return M |> sparse
 end
-
 
 # beta = 6
 # N_values = (2:15)
