@@ -97,6 +97,27 @@ function mixing_fixed(N,beta,t,e,v)
     return M 
 end
 
+function mixing_fixed_glaub(N,beta,t,e,v)
+    U = v*diagm(exp.(-1im*t*e))*inv(v)
+    prob = (abs.(U)).^2
+    dim = (2)^N
+    M = zeros(dim,dim)
+    for col in (0:dim-1)
+        E_sp = ising_energy(N,col)
+        diag = 0 
+        for row in (0:dim-1)
+            if row != col
+                E_s = ising_energy(N,row)
+                m = prob[col+1,row+1]*(1/(1+exp(-beta*(E_s-E_sp))))
+                M[col+1,row+1] = m
+                diag += m
+            end
+        M[col+1,col+1] = 1-diag
+        end
+    end
+    return M 
+end
+
 
 # N = 10
 # gamma = 0.75

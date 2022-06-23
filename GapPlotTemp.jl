@@ -8,7 +8,7 @@ using LsqFit
 N = 10
 temp = 10 .^ (range(-2.5,stop=2.5,length=50))
 gapMH = load_object("Data/MHgapN10")
-gapG = load_object("Data/gapN10")
+gapG = load_object("Data/GlaubGenGapN10")
 gap = load_object("Data/gamma0.75t8gapN10")
 plt.scatter(temp, gapG, label = "Glauber")
 plt.scatter(temp, gapMH, label = "MH")
