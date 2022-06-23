@@ -8,7 +8,7 @@ include("1DIsing.jl")
 
 N = 10
 beta = 100
-num_values = 50
+num_values = 100
 gamma_values = range(0,1, length=num_values)
 t_values = range(0,25, length=num_values)
 
@@ -28,12 +28,12 @@ t_values = range(0,25, length=num_values)
 # save_object("Data/gammaTimeGrid50", gap_all)
 
 
-gap_all= load_object("Data/gammaTimeGrid50")
+gap_all= load_object("Data/gammaTimeGrid100")
 plt.title(L"qHMC Spectral Gap  $\beta= 100$ $N=10$")
-plt.imshow(gap_all,extent = [0, 25, 0 , 1], aspect="auto")
+plt.imshow(log.(gap_all),extent = [0, 25, 0 , 1], aspect="auto")
 plt.xlabel(L"$t$")
 plt.ylabel(L"$\gamma$")
 bar = plt.colorbar()
 bar.set_label(L"$\delta$")
-plt.savefig("Figures/grid50.png")
+# plt.savefig("Figures/grid100.png")
 plt.show()

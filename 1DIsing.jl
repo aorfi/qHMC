@@ -99,8 +99,8 @@ end
 
 
 # N = 10
-# gamma = 0.5
-# t = 20
+# gamma = 0.75
+# t = 8
 # temp = 10 .^ (range(-2.5,stop=2.5,length=50))
 # beta_values = 1 ./ temp
 # gap_all = zeros(length(beta_values))
@@ -111,7 +111,7 @@ end
 #     e,v  = eigs(M, nev = 2, which=:LR)
 #     gap_all[j] = abs(e[1]-e[2])
 # end
-# save_object("Data/gamma0.5t20gapN10", gap_all)
+# save_object("Data/gamma0.75t8gapN10", gap_all)
 
 
 
