@@ -120,7 +120,7 @@ end
 
 
 # N = 10
-# gamma = 0.75
+# gamma = 0.5
 # t = 8
 # temp = 10 .^ (range(-2.5,stop=2.5,length=50))
 # beta_values = 1 ./ temp
@@ -132,21 +132,21 @@ end
 #     e,v  = eigs(M, nev = 2, which=:LR)
 #     gap_all[j] = abs(e[1]-e[2])
 # end
-# save_object("Data/Ggamma0.75t8gapN10", gap_all)
+# save_object("Data/Ggamma0.5t8gapN10", gap_all)
 
 
-# beta = 300
-# gamma = 0.75
-# t = 8
-# N_values = (2:13)
-# gap_all = zeros(length(N_values))
-# for j in (1:length(N_values))
-#     N = N_values[j]
-#     println(" Working on N = ",N)
-#     M = mixing_matrix(N,beta,gamma,t)
-#     e,v  = eigen(M)
-#     gap_all[j] = abs(e[end]-e[end-1])
-#     print("Gap: ",abs(e[end]-e[end-1]))
-# end
-# save_object("Data/gamma0.75t8gapBeta300", gap_all)
+beta = 300
+gamma = 0.5
+t = 8
+N_values = (2:13)
+gap_all = zeros(length(N_values))
+for j in (1:length(N_values))
+    N = N_values[j]
+    println(" Working on N = ",N)
+    M = mixing_matrix(N,beta,gamma,t)
+    e,v  = eigen(M)
+    gap_all[j] = abs(e[end]-e[end-1])
+    print("Gap: ",abs(e[end]-e[end-1]))
+end
+save_object("Data/gamma0.5t8gapBeta300", gap_all)
 
