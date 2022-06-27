@@ -28,22 +28,22 @@ end
 function mixing(N, beta)
     dim = (2)^N
     M = zeros(dim,dim)
-    for col in (0:dim-1)
-        E_sp = ising_energy(N,col)
-        diag = 0 
-        for row in (0:dim-1)
-            if row != col
-                E_s = ising_energy(N,row)
-                m = (1/2^N)*min(1,exp(-beta*(E_sp-E_s)))
-                M[col+1,row+1] = m
-                diag += m
-            end
-        M[col+1,col+1] = 1-diag
-        end
+    for ket in (0:dim-1)
+        E_sp = ising_energy(N,ket)
+        diag = 0
+        for SpinIndex in (0:N-1)
+            bit = Int(2)^(SpinIndex)
+            bra = ket ⊻ bit
+            E_s = ising_energy(N,bra)
+            # Sigma_x term
+            m = (1/N)*min(1,exp(-beta*(E_s-E_sp)))
+            M[bra+1,ket+1] = m
+            diag += (1/N)*min(1,exp(beta*(E_s-ising_energy(N,ket))))
+        end 
+        M[ket+1,ket+1] = 1-diag
     end
     return M
 end
-
 
 # beta = 300
 # N_values = (2:13)
@@ -67,7 +67,7 @@ for j in (1:length(beta_values))
     println(" Working on beta = ",beta)
     M = mixing(N,beta)
     e,v  = eigs(M, nev = 3, which=:LR)
-    # gap_all[j] = abs(e[1]-e[2])
-    gap_all[j] = abs(1-e[3])
+    gap_all[j] = abs(e[1]-e[2])
+    # gap_all[j] = abs(1-e[3])
 end
-save_object("Data/MH/MHgapOBCN10third", gap_all)
+save_object("Data/MHLoc/MHLocGapOBCN10", gap_all)

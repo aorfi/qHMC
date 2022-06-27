@@ -12,17 +12,29 @@ end
 function accept_prob(N, beta, config,spin)
     spin_forward = spin + 1
     spin_back = spin - 1
-    #PBC
+    #OBC
     if spin == N
-        spin_forward = 1
+        p_top = exp(-beta*sigma_z(N,config,spin)*(sigma_z(N,config,spin_back)))
+        p_bot = exp(-beta*(sigma_z(N,config,spin_back)))+exp(beta*(sigma_z(N,config,spin_back)))
+    elseif spin == 1
+        p_top = exp(-beta*sigma_z(N,config,spin)*(sigma_z(N,config,spin_forward)))
+        p_bot = exp(-beta*(sigma_z(N,config,spin_forward)))+exp(beta*(sigma_z(N,config,spin_forward)))
+    else
+        p_top = exp(-beta*sigma_z(N,config,spin)*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)))
+        p_bot = exp(-beta*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)))+exp(beta*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)))
     end
-    if spin == 1
-        spin_back = N
-    end
-    p_top = exp(-beta*sigma_z(N,config,spin)*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)))
-    p_bot = exp(-beta*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)))+exp(beta*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)))
+    #PBC
+    # if spin == N
+    #     spin_forward =1
+    #     end
+    # if spin == 1
+    #     spin_back = N
+    # end
+    # p_top = exp(-beta*sigma_z(N,config,spin)*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)))
+    # p_bot = exp(-beta*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)))+exp(beta*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)))
     return p_top/p_bot
 end
+
 
 function mixing(N, beta)
     dim = (2)^N
@@ -55,7 +67,7 @@ end
 #     e,v  = eigs(M, nev = 2, which=:LR)
 #     gap_all[j] = abs(e[1]-e[2])
 # end
-# save_object("Data/gapBeta6", gap_all)
+# save_object("Data/GlaubLocOBCgapBeta6", gap_all)
 
 # N = 10
 # temp = 10 .^ (range(-2.5,stop=2.5,length=50))
@@ -65,7 +77,10 @@ end
 #     beta = beta_values[j]
 #     println(" Working on beta = ",beta)
 #     M = mixing(N,beta)
-#     e,v  = eigs(M, nev = 2, which=:LR)
-#     gap_all[j] = abs(e[1]-e[2])
+#     e,v  = eigs(M, nev = 3, which=:LR)
+#     print("\n largest ", e[1])
+#     print(" second ", e[2])
+#     print(" third ",e[3])
+#     gap_all[j] = abs(1-e[3])
 # end
-# save_object("Data/gapN10", gap_all)
+# save_object("Data/GlaubLocOBCgapN10", gap_all)

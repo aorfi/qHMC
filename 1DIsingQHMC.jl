@@ -7,10 +7,15 @@ function ising_energy(N, config)
     # config is in [0,2^N] and spin in [1,N]
     eng = 0
     for SpinIndex in (0:N-1)
+        # PBC
+        # if SpinIndex == N-1
+        #     Si = 2*((config>>SpinIndex)&1)-1
+        #     Si_next = 2*((config>>(0))&1)-1
+        #     eng += -Si*Si_next
+        #     break
+        # end
+        # OBC 
         if SpinIndex == N-1
-            Si = 2*((config>>SpinIndex)&1)-1
-            Si_next = 2*((config>>(0))&1)-1
-            eng += -Si*Si_next
             break
         end
         Si = 2*((config>>SpinIndex)&1)-1
@@ -27,19 +32,24 @@ function ising_ham(N)
         ket_binary = bitstring(ket)
         Diagonal = Int64(0)
         for SpinIndex in (0:N-1)
+            # PBC
+            # if SpinIndex == N-1
+            #     # Si = 2*((ket>>SpinIndex)&1)-1
+            #     # print("\n",Si)
+            #     # Si_next = 2*((ket>>(0))&1)-1
+            #     # print("\n",Si_next)
+            #     # H[ket+1,ket+1] += -1 * Si*Si_next
+            #     break
+            # end
+            # OBC
             if SpinIndex == N-1
-                Si = 2*((ket>>SpinIndex)&1)-1
-                Si_next = 2*((ket>>(0))&1)-1
-                Bond = Si*Si_next
-                H[ket+1,ket+1] += -1 * Bond
                 break
             end
             Si = 2*((ket>>SpinIndex)&1)-1
             Si_next = 2*((ket>>(SpinIndex+1))&1)-1
-            Bond = Si*Si_next
-            Diagonal += Bond
+            Diagonal += -1*Si*Si_next
         end
-        H[ket+1,ket+1] += -1 * Diagonal
+        H[ket+1,ket+1] += Diagonal
     end
     return H #|> sparse
 end
@@ -118,7 +128,9 @@ function mixing_fixed_glaub(N,beta,t,e,v)
     return M 
 end
 
-
+N= 2
+display(ising_ham(N))
+display(ising_energy(N, 0))
 # N = 10
 # gamma = 0.5
 # t = 8
@@ -135,18 +147,18 @@ end
 # save_object("Data/Ggamma0.5t8gapN10", gap_all)
 
 
-beta = 300
-gamma = 0.5
-t = 8
-N_values = (2:13)
-gap_all = zeros(length(N_values))
-for j in (1:length(N_values))
-    N = N_values[j]
-    println(" Working on N = ",N)
-    M = mixing_matrix(N,beta,gamma,t)
-    e,v  = eigen(M)
-    gap_all[j] = abs(e[end]-e[end-1])
-    print("Gap: ",abs(e[end]-e[end-1]))
-end
-save_object("Data/gamma0.5t8gapBeta300", gap_all)
+# beta = 300
+# gamma = 0.5
+# t = 8
+# N_values = (2:13)
+# gap_all = zeros(length(N_values))
+# for j in (1:length(N_values))
+#     N = N_values[j]
+#     println(" Working on N = ",N)
+#     M = mixing_matrix(N,beta,gamma,t)
+#     e,v  = eigen(M)
+#     gap_all[j] = abs(e[end]-e[end-1])
+#     print("Gap: ",abs(e[end]-e[end-1]))
+# end
+# save_object("Data/gamma0.5t8gapBeta300", gap_all)
 
