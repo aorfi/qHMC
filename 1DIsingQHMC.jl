@@ -3,7 +3,7 @@ using SparseArrays
 using Arpack
 using JLD2
 
-function ising_energy(N, config,h)
+function ising_energy(N, config)
     # config is in [0,2^N] and spin in [1,N]
     eng = 0
     for SpinIndex in (0:N-1)
@@ -17,19 +17,19 @@ function ising_energy(N, config,h)
         # end
         # OBC 
         if SpinIndex == N-1
-            Si = 2*((config>>SpinIndex)&1)-1
-            eng += h*Si
+            # Si = 2*((config>>SpinIndex)&1)-1
+            # eng += h*Si
             break
         end
         Si = 2*((config>>SpinIndex)&1)-1
-        eng += h*Si
+        # eng += h*Si
         Si_next = 2*((config>>(SpinIndex+1))&1)-1
         eng += -Si*Si_next
     end
     return eng
 end
 
-function ising_ham(N,h)
+function ising_ham(N)
     dim = (2)^N
     H = zeros(dim,dim)
     for ket in (0:dim-1)
@@ -46,12 +46,12 @@ function ising_ham(N,h)
             # end
             # OBC
             if SpinIndex == N-1
-                Si = 2*((ket>>SpinIndex)&1)-1
-                Diagonal += h*Si
+                # Si = 2*((ket>>SpinIndex)&1)-1
+                # Diagonal += h*Si
                 break
             end
             Si = 2*((ket>>SpinIndex)&1)-1
-            Diagonal += h*Si
+            # Diagonal += h*Si
             Si_next = 2*((ket>>(SpinIndex+1))&1)-1
             Diagonal += -1*Si*Si_next
         end
@@ -133,12 +133,6 @@ function mixing_fixed_glaub(N,beta,t,e,v)
     end
     return M 
 end
-
-N= 10
-h=0.1
-H = ising_ham(N,h)
-e,v = eigen(H)
-display(e)
 
 
 # N = 10
