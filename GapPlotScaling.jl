@@ -41,31 +41,63 @@ using LsqFit
 # plt.savefig("Figures/gapBeta300fit.png")
 # plt.show()
 
-N_values = (2:15)
-gap = load_object("Data/GlaubLocOBCgapBeta6")
+N_values = (4:15)
+# gapB6 = load_object("Data/GlaubLoc/GlaubLocOBCgapBeta6")
+# gap = load_object("Data/GlaubLoc/GlaubLocPBCgapBeta6")
+gapB6 = load_object("Data/MHLoc/MHLocOBCgapBeta6")
+gap = load_object("Data/MHLoc/MHLocPBCgapBeta6")
+
+
+# gapB6t = load_object("Data/GlaubLoc/GlaubLocOBCgapBeta6third")
+# gapB300 = load_object("Data/GlaubLoc/GlaubLocOBCgapBeta300")
+# gapB300t = load_object("Data/GlaubLoc/GlaubLocOBCgapBeta300third")
+# gapB01 = load_object("Data/GlaubLoc/GlaubLocOBCgapBeta0.1")
+# gapB01t = load_object("Data/GlaubLoc/GlaubLocOBCgapBeta0.1third")
 
 @. model(x,p) = p[1]*x+p[2]
 p0 = [-0.2,-12.0]
-fit = curve_fit(model,log.(N_values),log.(gap),p0)
+fit = curve_fit(model,log.(N_values),log.(gapB6),p0)
 print("\nParams: \n ", fit.param)
 print("\nError: \n ", stderror(fit))
 param = fit.param
-
 scale = round(param[1], digits=4)
 
-x = range(2,15, length= 1000)
-plt.scatter(N_values, gap)
+fitp = curve_fit(model,log.(N_values),log.(gap),p0)
+paramp = fitp.param
+scalep = round(paramp[1], digits=4)
 
-plt.plot(x,exp.(model(log.(x),param)),linestyle = "dashed", label = string("Glauber Scaling  ", scale))
+# fitB6t = curve_fit(model,log.(N_values),log.(gapB6t),p0)
+# paramB6t = fitB6t.param
+# scaleB6t = round(paramB6t[1], digits=4)
 
-plt.title(string(L"Spectral Gap  $\beta= $ ", 300))
+# fitB01 = curve_fit(model,log.(N_values),log.(gapB01),p0)
+# paramB01 = fitB01.param
+# scaleB01 = round(paramB01[1], digits=4)
+
+x = range(4,15, length= 1000)
+plt.scatter(N_values, gapB6)
+plt.plot(x,exp.(model(log.(x),param)),linestyle = "dashed", label = string(L"$\beta= 6$ OBC, scaling = ", scale))
+plt.scatter(N_values, gap, label = L"$\beta= 6$ PBC")
+# plt.plot(x,exp.(model(log.(x),paramp)),linestyle = "dashed", label = string(L"$\beta= 6$ PBC, scaling = ", scalep))
+# plt.scatter(N_values, gapB6t, alpha = 0.5)
+# plt.plot(x,exp.(model(log.(x),paramB6t)),linestyle = "dashed", label = string(L"$\beta= 6$ 1-e[3], scaling = ", scaleB6t))
+
+
+# plt.scatter(N_values, gapB01, alpha = 0.5)
+# plt.plot(x,exp.(model(log.(x),paramB01)),linestyle = "dashed", label = string(L"$\beta= 0.1$ 1-e[2], scaling = ", scaleB01))
+# plt.scatter(N_values, gapB01t, label=L"$\beta= 0.1$ 1-e[3]", marker = "^")
+# plt.scatter(N_values, gapB300, label=L"$\beta= 300$ 1-e[2]", alpha = 0.5)
+# plt.scatter(N_values, gapB300t, label=L"$\beta= 300$ 1-e[3]", marker = "^")
+
+
+plt.title("MH Local Spectral Gap Scaling")
 plt.ylabel(L"$\delta$")
 plt.xlabel(L"$N$")
 plt.yscale("log")
 plt.xscale("log")
 plt.grid("both","both")
 plt.legend()
-# plt.savefig("Figures/gapBeta300fit.png")
+plt.savefig("Figures/MHLocal/gapBCscaling.png")
 plt.show()
 
 

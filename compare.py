@@ -98,11 +98,15 @@ def parent_ham(Hc,M,beta,N):
 
 
 beta = 1
-N = 3
+N = 2
+h = 0.1
 sz_list = qutip_tensors(N)[2]
 H = 0 
 for n in range(N-1):
     H += -sz_list[n]*sz_list[n+1]
+    H += 0.1*sz_list[n]
+# H += -sz_list[n]*sz_list[0] 
+H += 0.1*sz_list[N-1]
 print(H)
 # sx_list = qutip_tensors(N)[0]
 # p = mixing_prob(N,beta)

@@ -3,29 +3,33 @@ using SparseArrays
 using Arpack
 using JLD2
 
-function ising_energy(N, config)
+function ising_energy(N, config,h)
     # config is in [0,2^N] and spin in [1,N]
     eng = 0
     for SpinIndex in (0:N-1)
         # PBC
         # if SpinIndex == N-1
         #     Si = 2*((config>>SpinIndex)&1)-1
-        #     Si_next = 2*((config>>(0))&1)-1
+        #     eng += h*Si
+        #     Si_next = 2*((config>>(1))&1)-1
         #     eng += -Si*Si_next
         #     break
         # end
         # OBC 
         if SpinIndex == N-1
+            Si = 2*((config>>SpinIndex)&1)-1
+            eng += h*Si
             break
         end
         Si = 2*((config>>SpinIndex)&1)-1
+        eng += h*Si
         Si_next = 2*((config>>(SpinIndex+1))&1)-1
         eng += -Si*Si_next
     end
     return eng
 end
 
-function ising_ham(N)
+function ising_ham(N,h)
     dim = (2)^N
     H = zeros(dim,dim)
     for ket in (0:dim-1)
@@ -34,18 +38,20 @@ function ising_ham(N)
         for SpinIndex in (0:N-1)
             # PBC
             # if SpinIndex == N-1
-            #     # Si = 2*((ket>>SpinIndex)&1)-1
-            #     # print("\n",Si)
-            #     # Si_next = 2*((ket>>(0))&1)-1
-            #     # print("\n",Si_next)
-            #     # H[ket+1,ket+1] += -1 * Si*Si_next
+            #     Si = 2*((ket>>SpinIndex)&1)-1
+            #     Diagonal += h*Si
+            #     Si_next = 2*((ket>>(1))&1)-1
+            #     H[ket+1,ket+1] += -1 * Si*Si_next
             #     break
             # end
             # OBC
             if SpinIndex == N-1
+                Si = 2*((ket>>SpinIndex)&1)-1
+                Diagonal += h*Si
                 break
             end
             Si = 2*((ket>>SpinIndex)&1)-1
+            Diagonal += h*Si
             Si_next = 2*((ket>>(SpinIndex+1))&1)-1
             Diagonal += -1*Si*Si_next
         end
@@ -128,9 +134,13 @@ function mixing_fixed_glaub(N,beta,t,e,v)
     return M 
 end
 
-N= 2
-display(ising_ham(N))
-display(ising_energy(N, 0))
+N= 10
+h=0.1
+H = ising_ham(N,h)
+e,v = eigen(H)
+display(e)
+
+
 # N = 10
 # gamma = 0.5
 # t = 8
