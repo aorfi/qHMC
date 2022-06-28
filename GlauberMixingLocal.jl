@@ -40,14 +40,13 @@ function mixing(N, beta,h)
     M = zeros(dim,dim)
     for ket in (0:dim-1)
         ket_binary = bitstring(ket)
-        Diagonal = Int64(0)
         p_sum = 0
         for SpinIndex in (0:N-1)
             bit = Int(2)^(SpinIndex)
             bra = ket ⊻ bit
             # Sigma_x term
-            M[bra+1,ket+1] = (1/N)*accept_prob_feild(N, beta, bra,SpinIndex+1,h)
-            p_sum += (1/N)*accept_prob_feild(N, beta, ket,SpinIndex+1,h)
+            M[bra+1,ket+1] = (1/N)*accept_prob(N, beta, bra,SpinIndex+1,h)
+            p_sum += (1/N)*accept_prob(N, beta, ket,SpinIndex+1,h)
         end
         # Diagonal term
         M[ket+1,ket+1] += 1-p_sum
@@ -71,27 +70,28 @@ end
 # end
 # save_object("Data/GlaubLoc/GlaubLocOBCgapBeta6", gap_all)
 
-# N = 10
-# h = 0.1
-# temp = 10 .^ (range(-2.5,stop=2.5,length=50))
-# beta_values = 1 ./ temp
-# gap_all = zeros(length(beta_values))
-# e1 = zeros(length(beta_values))
-# e2 = zeros(length(beta_values))
-# e3 = zeros(length(beta_values))
-# for j in (1:length(beta_values))
-#     beta = beta_values[j]
-#     println(" Working on beta = ",beta)
-#     M = mixing_field(N,beta,h)
-#     e,v  = eigs(M, nev = 3, which=:LR)
-#     e1[j] = abs(e[1])
-#     e2[j] = abs(e[2])
-#     e3[j] = abs(e[3])
-#     # print("\n largest ", e[1])
-#     # print(" second ", e[2])
-#     # print(" third ",e[3])
-#     # gap_all[j] = abs(1-e[2])
-# end
+N = 12
+h = 0
+temp = 10 .^ (range(-2.5,stop=2.5,length=50))
+beta_values = 1 ./ temp
+gap_all = zeros(length(beta_values))
+e1 = zeros(length(beta_values))
+e2 = zeros(length(beta_values))
+e3 = zeros(length(beta_values))
+for j in (1:length(beta_values))
+    beta = beta_values[j]
+    println(" Working on beta = ",beta)
+    M = mixing(N,beta,h)
+    e,v  = eigs(M, nev = 3, which=:LR)
+    e1[j] = abs(e[1])
+    e2[j] = abs(e[2])
+    e3[j] = abs(e[3])
+    # print("\n largest ", e[1])
+    # print(" second ", e[2])
+    # print(" third ",e[3])
+    gap_all[j] = abs(1-e[2])
+end
+save_object("Data/GlaubLoc/GlaubLocOBCgapN12", gap_all)
 # save_object("Data/GlaubLoc/GlaubLocF0.1OBCgapN10e1", e1)
 # save_object("Data/GlaubLoc/GlaubLocF0.1OBCgapN10e2", e2)
 # save_object("Data/GlaubLoc/GlaubLocF0.1OBCgapN10e3", e3)

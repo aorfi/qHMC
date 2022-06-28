@@ -60,10 +60,24 @@ function ising_ham(N)
     return H #|> sparse
 end
 
-function mixing_ham(N)
+function mixing_ham_dense(N)
     return 1/sqrt(2^N)*ones(2^N,2^N)
 end
 
+function mixing_ham(N)
+    dim = (2)^N
+    Hm = zeros(dim,dim)
+    for ket in (0:dim-1)
+        ket_binary = bitstring(ket)
+        for SpinIndex in (0:N-1)
+            bit = Int(2)^(SpinIndex)
+            bra = ket ⊻ bit
+            # Sigma_x term
+            Hm[bra+1,ket+1] += 1 
+        end
+    end
+    return Hm
+end
 
 function ham(gamma,N)
     H = (1-gamma)*ising_ham(N) + gamma*mixing_ham(N)
@@ -134,10 +148,9 @@ function mixing_fixed_glaub(N,beta,t,e,v)
     return M 
 end
 
-
 # N = 10
-# gamma = 0.5
-# t = 8
+# gamma = 0.75
+# t = 5
 # temp = 10 .^ (range(-2.5,stop=2.5,length=50))
 # beta_values = 1 ./ temp
 # gap_all = zeros(length(beta_values))
@@ -146,15 +159,15 @@ end
 #     println(" Working on beta = ",beta)
 #     M = mixing_matrix(N,beta,gamma,t)
 #     e,v  = eigs(M, nev = 2, which=:LR)
-#     gap_all[j] = abs(e[1]-e[2])
+#     gap_all[j] = abs(1-e[2])
 # end
-# save_object("Data/Ggamma0.5t8gapN10", gap_all)
+# save_object("Data/qHMC/OBC/gamma0.75t5gapN10", gap_all)
 
 
 # beta = 300
-# gamma = 0.5
-# t = 8
-# N_values = (2:13)
+# gamma = 0.75
+# t = 5
+# N_values = (2:12)
 # gap_all = zeros(length(N_values))
 # for j in (1:length(N_values))
 #     N = N_values[j]
@@ -164,5 +177,5 @@ end
 #     gap_all[j] = abs(e[end]-e[end-1])
 #     print("Gap: ",abs(e[end]-e[end-1]))
 # end
-# save_object("Data/gamma0.5t8gapBeta300", gap_all)
+# save_object("Data/qHMC/OBC/gamma0.75t5gapBeta300NotNormalizedHmix", gap_all)
 

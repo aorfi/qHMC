@@ -62,7 +62,7 @@ end
 # end
 # save_object("Data/Glaub/OBCGlaubGengapBeta300", gap_all)
 
-N = 10
+N = 12
 h=0
 temp = 10 .^ (range(-2.5,stop=2.5,length=50))
 beta_values = 1 ./ temp
@@ -75,7 +75,7 @@ for j in (1:length(beta_values))
     gap_all[j] = abs(1-e[2])
     # gap_all[j] = abs(1-e[3])
 end
-save_object("Data/Glaub/GlaubGapOBCN10", gap_all)
+save_object("Data/Glaub/GlaubGapOBCN12", gap_all)
 
 # N = 10
 # h=0.1
