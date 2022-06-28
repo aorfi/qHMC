@@ -4,31 +4,50 @@ using PyPlot
 using JLD2
 using LsqFit
 
-# plot gap vs temp for fixed N
+# # plot gap vs temp for fixed N CLASSICAL
+# N = 12
+# temp = 10 .^ (range(-2.5,stop=2.5,length=50))
+# gapMH = load_object("Data/MH/MHgapOBCN12")
+# # gapMH3 = load_object("Data/MH/MHgapOBCN10third")
+# gapMHl = load_object("Data/MHLoc/MHLocGapOBCN12")
+# # gapMHl3 = load_object("Data/MHLoc/MHLocGapOBCN10third")
+# gapG = load_object("Data/Glaub/GlaubGapOBCN12")
+# gapGl = load_object("Data/GlaubLoc/GlaubLocOBCgapN12")
+# # gapGl3 = load_object("Data/GlaubLoc/GlaubLocOBCgapN10third")
+
+# plt.scatter(temp, gapMH, label = "MH Uniform")
+# plt.scatter(temp, gapMHl, label = "MH Local")
+# plt.scatter(temp, gapG, label = "Glaubler Uniform")
+# plt.scatter(temp, gapGl, label = "Glaubler Local")
+
+# plt.title(string(L"Classical MCMC with OBC $N= $ ", N))
+# plt.ylabel(L"$\delta$")
+# plt.xlabel(L"$T$")
+# plt.yscale("log")
+# plt.xscale("log")
+# plt.grid("both","major")
+# plt.legend(loc=4)
+# # plt.savefig("Figures/ClassicalOBCGapN12.png")
+# plt.show()
+
+
+
+
+# plot gap vs temp for fixed N CLASSICAL
 N = 10
 temp = 10 .^ (range(-2.5,stop=2.5,length=50))
 gapMH = load_object("Data/MH/MHgapOBCN10")
-# gapMH3 = load_object("Data/MH/MHgapOBCN10third")
-gapMHl = load_object("Data/MHLoc/MHLocGapOBCN10")
-# gapMHl3 = load_object("Data/MHLoc/MHLocGapOBCN10third")
-gapG = load_object("Data/Glaub/GlaubGapOBCN10")
-gapGl = load_object("Data/GlaubLoc/GlaubLocOBCgapN10")
-# gapGl3 = load_object("Data/GlaubLoc/GlaubLocOBCgapN10third")
-
+gap  = load_object("Data/qHMC/OBC/gamma0.75t5gapN10")
 
 plt.scatter(temp, gapMH, label = "MH Uniform")
-plt.scatter(temp, gapMHl, label = "MH Local")
-plt.scatter(temp, gapG, label = "Glaubler Uniform")
-plt.scatter(temp, gapGl, label = "Glaubler Local")
+plt.scatter(temp, gap, label = L"$\gamma = 0.75$ $t=5$ ")
 
-
-plt.title(string(L"Classical MCMC with OBC $N= $ ", 10))
+plt.title(string(L"Gap Comparison $N= $ ", N))
 plt.ylabel(L"$\delta$")
 plt.xlabel(L"$T$")
 plt.yscale("log")
 plt.xscale("log")
 plt.grid("both","major")
 plt.legend(loc=4)
-plt.savefig("Figures/ClassicalOBCGapN10.png")
-# plt.savefig("Figures/MHLocal/MHLocEigenvaluesF0.1OBC.png")
+# plt.savefig("Figures/ClassicalOBCGapN12.png")
 plt.show()
