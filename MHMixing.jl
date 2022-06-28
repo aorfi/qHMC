@@ -48,23 +48,21 @@ function mixing(N, beta,h)
     return M
 end
 
-N=2
-h=0.1
-beta=1
-display(mixing(N,beta,h))
 
 # beta = 300
 # N_values = (2:13)
+# h=0
 # gap_all = zeros(length(N_values))
 # for j in (1:length(N_values))
 #     N = N_values[j]
 #     println(" Working on N = ",N)
-#     M = mixing(N,beta)
+#     M = mixing(N,beta,h)
 #     e,v  = eigen(M)
-#     gap_all[j] = abs(e[end]-e[end-1])
-#     print("Gap: ",abs(e[end]-e[end-1]))
+#     gap_all[j] = abs(1-e[end-1])
+#     print("Gap: ",abs(1-e[end-1]))
 # end
-# save_object("Data/MHgapBeta300", gap_all)
+# save_object("Data/MH/OBCMHgapBeta300", gap_all)
+
 
 # N = 10
 # temp = 10 .^ (range(-2.5,stop=2.5,length=50))

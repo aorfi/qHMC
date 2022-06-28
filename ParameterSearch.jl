@@ -31,7 +31,7 @@ include("1DIsingQHMC.jl")
 
 # Get gaps for different N
 beta = 100
-num_values = 1000
+num_values = 100
 gamma_values = range(0,1, length=num_values)
 t_values = range(0,25, length=num_values)
 N_values = (2:7)
