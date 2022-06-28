@@ -41,11 +41,11 @@ using LsqFit
 # plt.savefig("Figures/gapBeta300fit.png")
 # plt.show()
 
-N_values = (4:15)
+N_values = (2:13)
 # gapB6 = load_object("Data/GlaubLoc/GlaubLocOBCgapBeta6")
 # gap = load_object("Data/GlaubLoc/GlaubLocPBCgapBeta6")
-gapB6 = load_object("Data/MHLoc/MHLocOBCgapBeta6")
-gap = load_object("Data/MHLoc/MHLocPBCgapBeta6")
+gapB6 = load_object("Data/Glaub/OBCGlaubGengapBeta300")
+gap = load_object("Data/MH/OBCMHgapBeta300")
 
 
 # gapB6t = load_object("Data/GlaubLoc/GlaubLocOBCgapBeta6third")
@@ -56,15 +56,18 @@ gap = load_object("Data/MHLoc/MHLocPBCgapBeta6")
 
 @. model(x,p) = p[1]*x+p[2]
 p0 = [-0.2,-12.0]
-fit = curve_fit(model,log.(N_values),log.(gapB6),p0)
+fit = curve_fit(model,N_values,log.(gapB6),p0)
 print("\nParams: \n ", fit.param)
 print("\nError: \n ", stderror(fit))
 param = fit.param
-scale = round(param[1], digits=4)
 
-fitp = curve_fit(model,log.(N_values),log.(gap),p0)
+
+fitp = curve_fit(model,N_values,log.(gap),p0)
 paramp = fitp.param
-scalep = round(paramp[1], digits=4)
+
+
+scale = round(param[1]/log(2), digits=4)
+scalep = round(paramp[1]/log(2), digits=4)
 
 # fitB6t = curve_fit(model,log.(N_values),log.(gapB6t),p0)
 # paramB6t = fitB6t.param
@@ -74,11 +77,11 @@ scalep = round(paramp[1], digits=4)
 # paramB01 = fitB01.param
 # scaleB01 = round(paramB01[1], digits=4)
 
-x = range(4,15, length= 1000)
+x = range(2,13, length= 1000)
 plt.scatter(N_values, gapB6)
-plt.plot(x,exp.(model(log.(x),param)),linestyle = "dashed", label = string(L"$\beta= 6$ OBC, scaling = ", scale))
-plt.scatter(N_values, gap, label = L"$\beta= 6$ PBC")
-# plt.plot(x,exp.(model(log.(x),paramp)),linestyle = "dashed", label = string(L"$\beta= 6$ PBC, scaling = ", scalep))
+plt.plot(x,exp.(model(x,param)),linestyle = "dashed", label = L"Glauber Uniform $2^{-N}$ ")
+plt.scatter(N_values, gap)
+plt.plot(x,exp.(model(x,paramp)),linestyle = "dashed", label = L"MH Uniform $2^{-N}$ ")
 # plt.scatter(N_values, gapB6t, alpha = 0.5)
 # plt.plot(x,exp.(model(log.(x),paramB6t)),linestyle = "dashed", label = string(L"$\beta= 6$ 1-e[3], scaling = ", scaleB6t))
 
@@ -90,14 +93,14 @@ plt.scatter(N_values, gap, label = L"$\beta= 6$ PBC")
 # plt.scatter(N_values, gapB300t, label=L"$\beta= 300$ 1-e[3]", marker = "^")
 
 
-plt.title("MH Local Spectral Gap Scaling")
+plt.title(L"Uniform Spectral Gap Scaling OBC $\beta = 300 $")
 plt.ylabel(L"$\delta$")
 plt.xlabel(L"$N$")
 plt.yscale("log")
-plt.xscale("log")
+# plt.xscale("log")
 plt.grid("both","both")
 plt.legend()
-plt.savefig("Figures/MHLocal/gapBCscaling.png")
+# plt.savefig("Figures/MHLocal/gapBCscaling.png")
 plt.show()
 
 
