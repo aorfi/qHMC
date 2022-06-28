@@ -149,8 +149,8 @@ function mixing_fixed_glaub(N,beta,t,e,v)
 end
 
 # N = 10
-# gamma = 0.75
-# t = 5
+# gamma = 0.5
+# t = 20
 # temp = 10 .^ (range(-2.5,stop=2.5,length=50))
 # beta_values = 1 ./ temp
 # gap_all = zeros(length(beta_values))
@@ -161,21 +161,21 @@ end
 #     e,v  = eigs(M, nev = 2, which=:LR)
 #     gap_all[j] = abs(1-e[2])
 # end
-# save_object("Data/qHMC/OBC/gamma0.75t5gapN10", gap_all)
+# save_object("Data/qHMC/SigmaX/gamma0.5t20gapN10", gap_all)
 
 
 # beta = 300
-# gamma = 0.75
-# t = 5
+# gamma = 0.5
+# t = 20
 # N_values = (2:12)
 # gap_all = zeros(length(N_values))
 # for j in (1:length(N_values))
 #     N = N_values[j]
 #     println(" Working on N = ",N)
 #     M = mixing_matrix(N,beta,gamma,t)
-#     e,v  = eigen(M)
-#     gap_all[j] = abs(e[end]-e[end-1])
-#     print("Gap: ",abs(e[end]-e[end-1]))
+#     e,v  = eigs(M, nev = 2, which=:LR)
+#     gap_all[j] = abs(1-e[2])
+#     print("Gap: ",abs(1-e[2]))
 # end
-# save_object("Data/qHMC/OBC/gamma0.75t5gapBeta300NotNormalizedHmix", gap_all)
+# save_object("Data/qHMC/SigmaX/gamma0.5t20gapBeta300", gap_all)
 

@@ -31,7 +31,7 @@ include("1DIsingQHMC.jl")
 
 # Get gaps for different N
 # beta = 100
-# num_values = 20
+# num_values = 10
 # gamma_values = range(0,1, length=num_values)
 # t_values = range(0,25, length=num_values)
 # N_values = (10:10)
@@ -50,20 +50,21 @@ include("1DIsingQHMC.jl")
 #             gap_all[g_i,t_i] = abs(1-eM[2])
 #         end
 #     end
-#     name = "Data/GridSearch/OBC/OBCGlaubGrid20N"*string(N)*"beta"*string(beta)
+#     name = "Data/GridSearch/SigmaX/GlaubGrid10N"*string(N)*"beta"*string(beta)
 #     save_object(name, gap_all)
 # end
 
-# N=10
-# beta = 100
-# name = "Data/GridSearch/OBC/OBCGlaubGrid20N"*string(N)*"beta"*string(beta)
-# gap_all= load_object(name)
-# plt.title(L"qHMC Spectral Gap  OBC $\beta= $ "*string(beta)*L" $N = $"*string(N))
-# plt.imshow(gap_all,extent = [0, 25, 0 , 1], aspect="auto")
-# plt.xlabel(L"$t$")
-# plt.ylabel(L"$\gamma$")
-# bar = plt.colorbar()
-# bar.set_label(L"$\delta$")
-# name = "Figures/GridSearch/OBC/OBCgridG20N"*string(N)*"beta"*string(beta)*".png"
-# plt.savefig(name)
-# plt.show()
+N=9
+beta = 100
+# name = "Data/GridSearch/SigmaX/GlaubGrid10N"*string(N)*"beta"*string(beta)
+name = "Data/GridSearch/OBC/OBCGlaubGrid500N"*string(N)*"beta"*string(beta)
+gap_all= load_object(name)
+plt.title(L"qHMC Spectral Gap  OBC $\beta= $ "*string(beta)*L" $N = $"*string(N))
+plt.imshow(gap_all,extent = [0, 25, 0 , 1], aspect="auto")
+plt.xlabel(L"$t$")
+plt.ylabel(L"$\gamma$")
+bar = plt.colorbar()
+bar.set_label(L"$\delta$")
+name = "Figures/GridSearch/OBC/OBCgridG500N"*string(N)*"beta"*string(beta)*".png"
+plt.savefig(name)
+plt.show()

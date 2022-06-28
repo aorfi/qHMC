@@ -36,11 +36,12 @@ using LsqFit
 # plot gap vs temp for fixed N CLASSICAL
 N = 10
 temp = 10 .^ (range(-2.5,stop=2.5,length=50))
-gapMH = load_object("Data/MH/MHgapOBCN10")
-gap  = load_object("Data/qHMC/OBC/gamma0.75t5gapN10")
+gapG = load_object("Data/Glaub/GlaubGapOBCN10")
+gap  = load_object("Data/qHMC/SigmaX/gamma0.5t20gapN10")
 
-plt.scatter(temp, gapMH, label = "MH Uniform")
-plt.scatter(temp, gap, label = L"$\gamma = 0.75$ $t=5$ ")
+plt.scatter(temp, gap, label = L"Glauber qHMC $\gamma = 0.75$ $t=5$ ")
+plt.scatter(temp, gapG, label = "Glauber Uniform")
+
 
 plt.title(string(L"Gap Comparison $N= $ ", N))
 plt.ylabel(L"$\delta$")
@@ -48,6 +49,6 @@ plt.xlabel(L"$T$")
 plt.yscale("log")
 plt.xscale("log")
 plt.grid("both","major")
-plt.legend(loc=4)
-# plt.savefig("Figures/ClassicalOBCGapN12.png")
+plt.legend()
+# plt.savefig("Figures/qHMCScaling/GapN10.png")
 plt.show()
