@@ -60,7 +60,7 @@ end
 #     N = N_values[j]
 #     println(" Working on N = ",N)
 #     M = mixing(N,beta,h)
-#     e,v  = eigs(M, nev = 3, which=:LR)
+#     e,v  = eigs(M, nev = 3, which=:LM)
 #     gap_all[j] = abs(1-e[2])
 # end
 # save_object("Data/MHLoc/MHLocPBCgapBeta6", gap_all)
@@ -74,7 +74,7 @@ for j in (1:length(beta_values))
     beta = beta_values[j]
     println(" Working on beta = ",beta)
     M = mixing(N,beta,h)
-    e,v  = eigs(M, nev = 3, which=:LR)
+    e,v  = eigs(M, nev = 3, which=:LM)
     gap_all[j] = abs(1-e[2])
     # gap_all[j] = abs(1-e[3])
 end
@@ -93,7 +93,7 @@ save_object("Data/MHLoc/MHLocGapOBCN12", gap_all)
 #     beta = beta_values[j]
 #     println(" Working on beta = ",beta)
 #     M = mixing_field(N,beta,h)
-#     e,v  = eigs(M, nev = 3, which=:LR)
+#     e,v  = eigs(M, nev = 3, which=:LM)
 #     e1[j] = abs(e[1])
 #     e2[j] = abs(e[2])
 #     e3[j] = abs(e[3])
