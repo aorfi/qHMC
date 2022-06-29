@@ -71,7 +71,7 @@ save_object("Data/Glaub/OBCGlaubGengapBeta2", gap_all)
 #     beta = beta_values[j]
 #     println(" Working on beta = ",beta)
 #     M = mixing(N,beta,h)
-#     e,v  = eigs(M, nev = 3, which=:LR)
+#     e,v  = eigs(M, nev = 3, which=:LM)
 #     gap_all[j] = abs(1-e[2])
 #     # gap_all[j] = abs(1-e[3])
 # end
@@ -89,7 +89,7 @@ save_object("Data/Glaub/OBCGlaubGengapBeta2", gap_all)
 #     beta = beta_values[j]
 #     println(" Working on beta = ",beta)
 #     M = mixing(N,beta,h)
-#     e,v  = eigs(M, nev = 3, which=:LR)
+#     e,v  = eigs(M, nev = 3, which=:LM)
 #     e1[j] = abs(e[1])
 #     e2[j] = abs(e[2])
 #     e3[j] = abs(e[3])
