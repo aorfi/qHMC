@@ -1,3 +1,4 @@
+# This is used to check my Hamiltonians against ones I know are correct 
 import matplotlib as plt
 import numpy as np
 from qutip import *
