@@ -30,10 +30,10 @@ include("qHMC.jl")
 
 # Get gaps for different N
 beta = 6
-num_values = 10
+num_values = 100
 alpha_values = range(0,30, length=num_values)
 eta_values = range(0,30, length=num_values)
-N_values = (5:6)
+N_values = (8:9)
 for N in N_values
     gap_all = zeros(num_values,num_values)
     for alpha_i in (1:num_values)
@@ -42,10 +42,10 @@ for N in N_values
             print("\nworking on alpha: ", alpha_i)
             print("  eta: ", eta_i)
             M = mixing_matrix(N,beta,alpha_values[alpha_i], eta_values[eta_i])
-            # e,v  = eigen(M)
-            # gap_all[g_i,t_i] = abs(1-e[end-1])
-            e,v  = eigs(M, nev = 2, which=:LM)
-            gap_all[alpha_i,eta_i] = 1-abs(e[2])
+            e,v  = eigen(M)
+            gap_all[g_i,t_i] = abs(1-e[end-1])
+            # e,v  = eigs(M, nev = 2, which=:LM)
+            # gap_all[alpha_i,eta_i] = 1-abs(e[2])
         end
     end
     name = "Data/GridSearch/alphaEtaParam/"*string(num_values)*"N"*string(N)*"beta"*string(beta)
