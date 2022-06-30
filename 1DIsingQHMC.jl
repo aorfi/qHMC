@@ -164,7 +164,7 @@ end
 # save_object("Data/qHMC/SigmaX/gamma0.5t20gapN10", gap_all)
 
 
-beta = 300
+beta = 6
 gamma_values = [0.2,0.3,0.5]
 t = 5
 N_values = (2:12)
@@ -172,11 +172,11 @@ for gamma in gamma_values
     gap_all = zeros(length(N_values))
     for j in (1:length(N_values))
         N = N_values[j]
-        println(" Working on N = ",N)
+        println(" Working on t = "*string(t)*" gamma = "*string(gamma))
         M = mixing_matrix(N,beta,gamma,t)
         e,v  = eigs(M, nev = 2, which=:LM)
         gap_all[j] = abs(1-e[2])
-        print("Gap: ",abs(1-e[2]))
+        # print("Gap: ",abs(1-e[2]))
     end
     name = "Data/qHMC/SigmaX/gamma"*string(gamma)*"t"*string(t)*"Beta"*string(beta)
     save_object(name, gap_all)

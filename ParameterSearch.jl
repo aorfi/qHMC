@@ -54,8 +54,8 @@ using LaTeXStrings
 #     save_object(name, gap_all)
 # end
 
-N=8
-beta = 100.0
+N=10
+beta = 100
 name = "Data/GridSearch/SigmaX/GlaubGrid100N"*string(N)*"beta"*string(beta)
 # name = "Data/GridSearch/OBC/OBCGlaubGrid500N"*string(N)*"beta"*string(beta)
 gap_all= load_object(name)
@@ -67,5 +67,5 @@ bar = plt.colorbar()
 # plt.clim(0, 0.05) 
 bar.set_label(L"$\delta$")
 name = "Figures/GridSearch/SigmaX/GlaubGridG100N"*string(N)*"beta"*string(beta)*".png"
-# plt.savefig(name)
+plt.savefig(name)
 plt.show()

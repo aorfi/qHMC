@@ -39,7 +39,7 @@ temp = 10 .^ (range(-2.5,stop=2.5,length=50))
 gapG = load_object("Data/Glaub/GlaubGapOBCN10")
 gap  = load_object("Data/qHMC/SigmaX/gamma0.5t20gapN10")
 
-plt.scatter(temp, gap, label = L"Glauber qHMC $\gamma = 0.75$ $t=5$ ")
+plt.scatter(temp, gap, label = L"Glauber qHMC $\gamma = 0.5$ $t=20$ ")
 plt.scatter(temp, gapG, label = "Glauber Uniform")
 
 
@@ -50,5 +50,5 @@ plt.yscale("log")
 plt.xscale("log")
 plt.grid("both","major")
 plt.legend()
-# plt.savefig("Figures/qHMCScaling/GapN10.png")
+plt.savefig("Figures/qHMCScaling/GapGamma0.5t20N10.png")
 plt.show()
