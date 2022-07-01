@@ -1,9 +1,10 @@
 using PyPlot
 using LaTeXStrings
+using JLD2
 
 N=5
 beta = 6
-num_values = 10
+num_values = 1000
 name = name = "Data/GridSearch/alphaEtaParam/"*string(num_values)*"N"*string(N)*"beta"*string(beta)
 gap_all= load_object(name)
 
