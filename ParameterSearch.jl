@@ -30,7 +30,7 @@ include("qHMC.jl")
 
 # Get gaps for different N
 beta = 6
-num_values = 1000
+num_values = 10
 alpha_values = range(0,30, length=num_values)
 eta_values = range(0,30, length=num_values)
 N_values = (5:5)
