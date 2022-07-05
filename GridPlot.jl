@@ -5,7 +5,7 @@ using JLD2
 N=5
 beta = 6
 num_values = 1000
-name = name = "Data/GridSearch/alphaEtaParam/long"*string(num_values)*"N"*string(N)*"beta"*string(beta)
+name =  "Data/GridSearch/alphaEtaParam/"*string(num_values)*"N"*string(N)*"beta"*string(beta)
 gap_all= load_object(name)
 max,cord = findmax(gap_all)
 max_param = 50
@@ -19,7 +19,12 @@ plt.ylabel(L"$\alpha$")
 
 # plt.clim(0, 0.05) 
 bar.set_label(L"$\delta$")
-name = "Figures/GridSearch/alphaEtaParam/long"*string(num_values)*"N"*string(N)*"beta"*string(beta)*".png"
+name = "Figures/GridSearch/alphaEtaParam/"*string(num_values)*"N"*string(N)*"beta"*string(beta)*".png"
 plt.savefig(name)
 # plt.clf()
 plt.show()
+
+
+
+
+

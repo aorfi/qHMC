@@ -48,19 +48,21 @@ function mixing(N, beta,h)
 end
 
 
-beta = 2
-N_values = (2:13)
+beta = 6
+N_values = (5:15)
 h=0
 gap_all = zeros(length(N_values))
 for j in (1:length(N_values))
     N = N_values[j]
     println(" Working on N = ",N)
     M = mixing(N,beta,h)
-    e,v  = eigen(M)
-    gap_all[j] = abs(1-e[end-1])
-    print("Gap: ",abs(1-e[end-1]))
+    # e,v  = eigen(M)
+    # gap_all[j] = abs(1-e[end-1])
+    e,v  = eigs(M, nev = 3, which=:LM)
+    gap_all[j] = 1-abs(e[2])
+    print("Gap: ",1-abs(e[2]))
 end
-save_object("Data/Glaub/OBCGlaubGengapBeta2", gap_all)
+save_object("Data/Glaub/CompareOBCGlaubGengapBeta6", gap_all)
 
 # N = 12
 # h=0
