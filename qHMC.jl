@@ -25,6 +25,13 @@ function ising_ham(N)
         ket_binary = bitstring(ket)
         Diagonal = Int64(0)
         for SpinIndex in (0:N-1)
+            # PBC
+            # if SpinIndex == N-1
+            #     Si = 2*((ket>>SpinIndex)&1)-1
+            #     Si_next = 2*((ket>>(1))&1)-1
+            #     Diagonal += -Si*Si_next
+            #     break
+            # end
             if SpinIndex == N-1
                 break
             end
@@ -84,4 +91,18 @@ function mixing_matrix(N,beta,alpha, eta)
 end
 
 
-
+beta = 6
+N_values = (5:12)
+alpha = 1
+eta = 1
+N_max = last(N_values)
+gap_all = zeros(length(N_values))
+for j in (1:length(N_values))
+    N = N_values[j]
+    println(" Working on N = ",N)
+    M = mixing_matrix(N,beta,alpha, eta)
+    e,v  = eigs(M, nev = 3, which=:LM)
+    # gap_all[j] = abs(1-e[3])
+    gap_all[j] = 1-abs(e[2])
+end
+save_object("Data/qHMC/alphaEtaParam/alpha1eta1beta6", gap_all)
