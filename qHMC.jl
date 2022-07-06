@@ -91,18 +91,31 @@ function mixing_matrix(N,beta,alpha, eta)
 end
 
 
-beta = 6
-N_values = (5:12)
-alpha = 1
-eta = 1
-N_max = last(N_values)
-gap_all = zeros(length(N_values))
-for j in (1:length(N_values))
-    N = N_values[j]
-    println(" Working on N = ",N)
-    M = mixing_matrix(N,beta,alpha, eta)
-    e,v  = eigs(M, nev = 3, which=:LM)
-    # gap_all[j] = abs(1-e[3])
-    gap_all[j] = 1-abs(e[2])
-end
-save_object("Data/qHMC/alphaEtaParam/alpha1eta1beta6", gap_all)
+# N = 2
+# alpha = 0 
+# eta = 1
+# H = ham(alpha, eta, N)
+# e,v = eigen(H)
+# U = exp(-1im*H)
+# prob = (abs.(U)).^2
+# display(H)
+# display(U)
+# display(prob)
+
+
+
+# beta = 6
+# N_values = (5:12)
+# alpha = 1
+# eta = 0.3
+# N_max = last(N_values)
+# gap_all = zeros(length(N_values))
+# for j in (1:length(N_values))
+#     N = N_values[j]
+#     println(" Working on N = ",N)
+#     M = mixing_matrix(N,beta,alpha, eta)
+#     e,v  = eigs(M, nev = 3, which=:LM)
+#     # gap_all[j] = abs(1-e[3])
+#     gap_all[j] = 1-abs(e[2])
+# end
+# save_object("Data/qHMC/alphaEtaParam/alpha1eta0.3beta6", gap_all)

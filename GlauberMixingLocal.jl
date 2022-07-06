@@ -55,20 +55,20 @@ function mixing(N, beta,h)
 end
 
 
-beta = 6
-h=0
-N_values = (5:15)
-N_max = last(N_values)
-gap_all = zeros(length(N_values))
-for j in (1:length(N_values))
-    N = N_values[j]
-    println(" Working on N = ",N)
-    M = mixing(N,beta,h)
-    e,v  = eigs(M, nev = 3, which=:LM)
-    # gap_all[j] = abs(1-e[3])
-    gap_all[j] = abs(1-e[2])
-end
-save_object("Data/GlaubLoc/CmpareGlaubLocOBCgapBeta6", gap_all)
+# beta = 6
+# h=0
+# N_values = (5:15)
+# N_max = last(N_values)
+# gap_all = zeros(length(N_values))
+# for j in (1:length(N_values))
+#     N = N_values[j]
+#     println(" Working on N = ",N)
+#     M = mixing(N,beta,h)
+#     e,v  = eigs(M, nev = 3, which=:LM)
+#     # gap_all[j] = abs(1-e[3])
+#     gap_all[j] = abs(1-e[2])
+# end
+# save_object("Data/GlaubLoc/CmpareGlaubLocOBCgapBeta6", gap_all)
 
 # N = 12
 # h = 0
