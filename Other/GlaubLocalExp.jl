@@ -3,41 +3,53 @@ using SparseArrays
 using Arpack
 using JLD2
 
-function ising_energy(N, couplings,h , config)
+function sigma_z(N, config, spin)
     # config is in [0,2^N] and spin in [1,N]
-    eng = 0
-    for SpinIndex in (0:N-1)
-        if SpinIndex == N-1
-            Si = 2*((config>>SpinIndex)&1)-1
-            eng += h*Si
-            Si_next = 2*((config>>(0))&1)-1
-            eng += -couplings[N]*Si*Si_next
-            break
-        end
-        Si = 2*((config>>SpinIndex)&1)-1
-        eng += h*Si
-        Si_next = 2*((config>>(SpinIndex+1))&1)-1
-        eng += -couplings[N-(SpinIndex+1)]*Si*Si_next
-    end
-    return eng
+    spin_index = spin -1
+    return 2*((config>>spin_index)&1)-1
 end
 
-function mixing(N,couplings,h,beta)
+function accept_prob(N, beta, config,spin,h)
+    spin_forward = spin + 1
+    spin_back = spin - 1
+    #OBC
+    if spin == N
+        p_top = exp(beta*sigma_z(N,config,spin)*(sigma_z(N,config,spin_back))-beta*h*sigma_z(N,config,spin))
+        p_bot = exp(-beta*(sigma_z(N,config,spin_back)-h))+exp(beta*(sigma_z(N,config,spin_back)-h))
+    elseif spin == 1
+        p_top = exp(beta*sigma_z(N,config,spin)*(sigma_z(N,config,spin_forward))-beta*h*sigma_z(N,config,spin))
+        p_bot = exp(-beta*(sigma_z(N,config,spin_forward)-h))+exp(beta*(sigma_z(N,config,spin_forward)-h))
+    else
+        p_top = exp(beta*sigma_z(N,config,spin)*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back))-beta*h*sigma_z(N,config,spin))
+        p_bot = exp(-beta*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)-h))+exp(beta*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)-h))
+    end
+    #PBC
+    # if spin == N
+    #     spin_forward =1
+    #     end
+    # if spin == 1
+    #     spin_back = N
+    # end
+    # p_top = exp(-beta*sigma_z(N,config,spin)*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back))-beta*h*sigma_z(N,config,spin))
+    # p_bot = exp(-beta*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)-h))+exp(beta*(sigma_z(N,config,spin_forward)+sigma_z(N,config,spin_back)-h))
+    return p_top/p_bot
+end
+
+function mixing(N, beta,h)
     dim = 2^N
     M = zeros(dim,dim)
     for ket in (0:dim-1)
-        E_sp = ising_energy(N,couplings,h,ket)
         p_sum = 0
         for SpinIndex in (0:N-1)
             bit = Int(2)^(SpinIndex)
             bra = ket ⊻ bit
-            E_s = ising_energy(N,couplings,h,bra)
             # Sigma_x term
-            M[bra+1,ket+1] = (1/N)*(1/(1+exp(beta*(E_s-E_sp))))
+            # M[bra+1,ket+1] = (1/N)*accept_prob(N, beta, bra,SpinIndex+1,h)
+            M[bra+1,ket+1] = accept_prob(N, beta, bra,SpinIndex+1,h)
             p_sum += (1/N)*accept_prob(N, beta, ket,SpinIndex+1,h)
         end
         # Diagonal term
-        M[ket+1,ket+1] += 1-p_sum
+        # M[ket+1,ket+1] += 1-p_sum
     end
     return M |> sparse
 end
@@ -47,11 +59,8 @@ end
 beta = 6
 N = 3
 h=0
-couplings = ones(N)
-couplings[end] = 0
-M = mixing(N,couplings,h,beta)
+M = mixing(N,beta,h)
 display(M)
-display(sum(M[1,:]))
 # e,v  = eigs(M, nev = 3, which=:LM)
 # display(e)
 

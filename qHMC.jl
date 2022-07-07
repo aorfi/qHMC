@@ -3,46 +3,48 @@ using SparseArrays
 using Arpack
 using JLD2
 
-# OBC
-function ising_energy(N, config)
+function ising_energy(N, couplings,h , config)
     # config is in [0,2^N] and spin in [1,N]
     eng = 0
     for SpinIndex in (0:N-1)
         if SpinIndex == N-1
+            Si = 2*((config>>SpinIndex)&1)-1
+            eng += h*Si
+            Si_next = 2*((config>>(0))&1)-1
+            eng += -couplings[N]*Si*Si_next
             break
         end
         Si = 2*((config>>SpinIndex)&1)-1
+        eng += h*Si
         Si_next = 2*((config>>(SpinIndex+1))&1)-1
-        eng += -Si*Si_next
+        eng += -couplings[N-(SpinIndex+1)]*Si*Si_next
     end
     return eng
 end
 
-function ising_ham(N)
-    dim = (2)^N
+function ising_ham(N, couplings, h)
+    dim = 2^N
     H = zeros(dim,dim)
     for ket in (0:dim-1)
-        ket_binary = bitstring(ket)
-        Diagonal = Int64(0)
+        Diagonal = 0
         for SpinIndex in (0:N-1)
-            # PBC
-            # if SpinIndex == N-1
-            #     Si = 2*((ket>>SpinIndex)&1)-1
-            #     Si_next = 2*((ket>>(1))&1)-1
-            #     Diagonal += -Si*Si_next
-            #     break
-            # end
+            # Boundary 
             if SpinIndex == N-1
+                Si = 2*((ket>>SpinIndex)&1)-1
+                Diagonal += h*Si 
+                Si_next = 2*((ket>>(0))&1)-1
+                Diagonal += -couplings[N]*Si*Si_next
                 break
             end
             Si = 2*((ket>>SpinIndex)&1)-1
+            Diagonal += h*Si 
             Si_next = 2*((ket>>(SpinIndex+1))&1)-1
-            Diagonal += -1*Si*Si_next
+            Diagonal += -couplings[N-(SpinIndex+1)]*Si*Si_next
         end
         H[ket+1,ket+1] += Diagonal
     end
     return H #|> sparse
-end
+end 
 
 
 function mixing_ham(N)
@@ -91,16 +93,18 @@ function mixing_matrix(N,beta,alpha, eta)
 end
 
 
-# N = 2
-# alpha = 0 
-# eta = 1
-# H = ham(alpha, eta, N)
-# e,v = eigen(H)
-# U = exp(-1im*H)
-# prob = (abs.(U)).^2
-# display(H)
-# display(U)
-# display(prob)
+N = 3
+alpha = 0 
+eta = 1
+
+couplings = ones(N)
+
+# couplings[end] = 0 # OBC
+display(couplings)
+H = ising_ham(N,couplings)
+display(H)
+display(ising_energy(N, couplings,6))
+
 
 
 
