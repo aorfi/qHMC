@@ -71,14 +71,14 @@ function mixing_matrix(N,beta,alpha, eta)
     H = ham(alpha, eta, N)
     U = exp(-1im*H)
     prob = (abs.(U)).^2
-    dim = (2)^N
+    dim = 2^N
     M = zeros(dim,dim)
     for col in (0:dim-1)
-        E_sp = ising_energy(N,col)
+        E_sp = ising_energy(N, couplings,h , col)
         diag = 0 
         for row in (0:dim-1)
             if row != col
-                E_s = ising_energy(N,row)
+                E_s = ising_energy(N, couplings,h,row)
                 # MH
                 # m = prob[col+1,row+1]*min(1,exp(-beta*(E_sp-E_s)))
                 # Glaub

@@ -34,64 +34,62 @@ function mixing(N,couplings,h,beta)
             E_s = ising_energy(N,couplings,h,bra)
             # Sigma_x term
             M[bra+1,ket+1] = (1/N)*(1/(1+exp(beta*(E_s-E_sp))))
-            p_sum += (1/N)*accept_prob(N, beta, ket,SpinIndex+1,h)
+            p_sum += (1/N)*(1/(1+exp(-beta*(E_s-ising_energy(N,couplings,h,ket)))))
         end
         # Diagonal term
         M[ket+1,ket+1] += 1-p_sum
     end
-    return M |> sparse
+    return M #|> sparse
 end
 
 
-
-beta = 6
-N = 3
-h=0
+N = 10
+h=5
 couplings = ones(N)
 couplings[end] = 0
-M = mixing(N,couplings,h,beta)
-display(M)
-display(sum(M[1,:]))
-# e,v  = eigs(M, nev = 3, which=:LM)
-# display(e)
+temp = 10 .^ (range(-2.5,stop=2.5,length=50))
+beta_values = 1 ./ temp
+gap_all = zeros(length(beta_values))
+for j in (1:length(beta_values))
+    beta = beta_values[j]
+    println(" Working on beta = ",beta)
+    M = mixing(N,couplings,h,beta)
+    e,v  = eigs(M, nev = 3, which=:LM)
+    gap_all[j] = 1-abs(e[2])
+    # e,v  = eigen(M)
+    # gap_all[j]= 1-abs(e[end-1])
+    println("Gap ", gap_all[j])
+end
+save_object("Data/GlaubLoc/OBCN10h"*string(h), gap_all)
 
-# beta = 6
+
+# beta = 5
+# N_values = (5:13)
 # h=0
-# N_values = (5:15)
-# N_max = last(N_values)
 # gap_all = zeros(length(N_values))
 # for j in (1:length(N_values))
 #     N = N_values[j]
+#     couplings = ones(N)
+#     # couplings[end] = 0
 #     println(" Working on N = ",N)
-#     M = mixing(N,beta,h)
-#     e,v  = eigs(M, nev = 3, which=:LM)
-#     # gap_all[j] = abs(1-e[3])
-#     gap_all[j] = abs(1-e[2])
+#     M = mixing(N,couplings,h,beta)
+#     e,v  = eigs(M, nev = 2, which=:LM)
+#     gap_all[j] = 1-abs(e[2])
+#     print("Gap: ",1-abs(e[2]))
 # end
-# save_object("Data/GlaubLoc/CmpareGlaubLocOBCgapBeta6", gap_all)
-
-# N = 12
-# h = 0
-# temp = 10 .^ (range(-2.5,stop=2.5,length=50))
-# beta_values = 1 ./ temp
-# gap_all = zeros(length(beta_values))
-# e1 = zeros(length(beta_values))
-# e2 = zeros(length(beta_values))
-# e3 = zeros(length(beta_values))
-# for j in (1:length(beta_values))
-#     beta = beta_values[j]
-#     println(" Working on beta = ",beta)
-#     M = mixing(N,beta,h)
-#     e,v  = eigs(M, nev = 3, which=:LM)
-#     e1[j] = abs(e[1])
-#     e2[j] = abs(e[2])
-#     e3[j] = abs(e[3])
-#     # print("\n largest ", e[1])
-#     # print(" second ", e[2])
-#     # print(" third ",e[3])
-#     gap_all[j] = abs(1-e[2])
+# save_object("Data/GlaubLoc/PBCBeta"*string(beta), gap_all)
+# beta = 5
+# N_values = (5:13)
+# h=0
+# gap_all = zeros(length(N_values))
+# for j in (1:length(N_values))
+#     N = N_values[j]
+#     couplings = ones(N)
+#     couplings[end] = 0
+#     println(" Working on N = ",N)
+#     M = mixing(N,couplings,h,beta)
+#     e,v  = eigs(M, nev = 2, which=:LM)
+#     gap_all[j] = 1-abs(e[2])
+#     print("Gap: ",1-abs(e[2]))
 # end
-# save_object("Data/GlaubLoc/GlaubLocOBCgapN12", gap_all)
-# save_object("Data/GlaubLoc/GlaubLocF0.1OBCgapN10e1", e1)
-# save_object("Data/GlaubLoc/GlaubLocF0.1OBCgapN10e2", e2)
-# save_object("Data/GlaubLoc/GlaubLocF0.1OBCgapN10e3", e3)
+# save_object("Data/GlaubLoc/OBCBeta"*string(beta), gap_all)
