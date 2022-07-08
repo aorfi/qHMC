@@ -97,23 +97,6 @@ end
 
 
 
-N = 10
-alpha = 0 
-eta = 1
-h=0
-couplings = rand(Normal(0,1),N)
-display(couplings)
-# couplings = ones(N)
-
-# # couplings[end] = 0 # OBC
-# display(couplings)
-# H = ising_ham(N,couplings,h)
-# display(H)
-
-
-
-
-
 # beta = 6
 # N_values = (5:12)
 # alpha = 1

@@ -45,9 +45,9 @@ include("MHMixing.jl")
 # save_object("Data/SK/Classical/MHLocN10", gap_all_MH_loc)
 
 beta = 5
-N_values = (5:12)
+N_values = (12:12)
 h=0
-runs = 100
+runs = 1
 gap_all_glab = zeros(length(N_values))
 gap_all_glab_loc = zeros(length(N_values))
 gap_all_MH = zeros(length(N_values))
@@ -86,7 +86,7 @@ for j in (1:length(N_values))
     gap_all_MH[j] = (1/runs)*sum(gap_MH)
     gap_all_MH_loc[j] = (1/runs)*sum(gap_MH_loc)
 end
-save_object("Data/SK/Classical/GlaubBeta5", gap_all_glab)
-save_object("Data/SK/Classical/GlaubLocBeta5", gap_all_glab_loc)
-save_object("Data/SK/Classical/MHBeta5", gap_all_MH)
-save_object("Data/SK/Classical/MHLocBeta5", gap_all_MH_loc)
+# save_object("Data/SK/Classical/GlaubBeta5", gap_all_glab)
+# save_object("Data/SK/Classical/GlaubLocBeta5", gap_all_glab_loc)
+# save_object("Data/SK/Classical/MHBeta5", gap_all_MH)
+# save_object("Data/SK/Classical/MHLocBeta5", gap_all_MH_loc)
