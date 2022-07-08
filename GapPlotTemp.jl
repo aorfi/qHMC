@@ -6,27 +6,26 @@ using LsqFit
 
 # # plot gap vs temp for fixed N CLASSICAL
 N = 10
-h = 5
+h = 0
 temp = 10 .^ (range(-2.5,stop=2.5,length=50))
-gapMH = load_object("Data/MH/OBCN10h"*string(h))
-gapMHl = load_object("Data/MHLoc/OBCN10h"*string(h))
-gapG = load_object("Data/Glaub/OBCN10h"*string(h))
-gapGl = load_object("Data/GlaubLoc/OBCN10h"*string(h))
-display(gapMHl)
+gapMH = load_object("Data/SK/Classical/MHN10")
+gapMHl = load_object("Data/SK/Classical/MHLocN10")
+gapG = load_object("Data/SK/Classical/GlaubN10")
+gapGl = load_object("Data/SK/Classical/GlaubLocN10")
 
 plt.scatter(temp, gapMH, label = "MH Uniform")
 plt.scatter(temp, gapMHl, label = "MH Local")
 plt.scatter(temp, gapG, label = "Glaubler Uniform")
 plt.scatter(temp, gapGl, label = "Glaubler Local")
 
-plt.title(L"Classical MCMC with OBC $N= $ "*string(N)*L" $h=$ "*string(h))
+plt.title(L"Classical MCMC SK Model $N= $ "*string(N))
 plt.ylabel(L"$\delta$")
 plt.xlabel(L"$T$")
 plt.yscale("log")
 plt.xscale("log")
 plt.grid("both","major")
 plt.legend(loc=4)
-plt.savefig("Figures/Classical/PBCGapN10h"*string(h)*".png")
+plt.savefig("Figures/SK/Classical/GapN10.png")
 plt.show()
 
 

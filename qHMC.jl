@@ -2,6 +2,9 @@ using LinearAlgebra
 using SparseArrays
 using Arpack
 using JLD2
+using PyPlot
+using Random, Distributions
+Random.seed!(123)
 
 function ising_energy(N, couplings,h , config)
     # config is in [0,2^N] and spin in [1,N]
@@ -62,13 +65,13 @@ function mixing_ham(N)
     return Hm
 end
 
-function ham(alpha, eta, N)
-    H = alpha*ising_ham(N) + eta*mixing_ham(N)
+function ham(alpha, eta, N,couplings, h)
+    H = alpha*ising_ham(N, couplings, h) + eta*mixing_ham(N)
     return H
 end
 
-function mixing_matrix(N,beta,alpha, eta)
-    H = ham(alpha, eta, N)
+function mixing_matrix(N,couplings,h,beta,alpha, eta) 
+    H = ham(alpha, eta, N,couplings, h)
     U = exp(-1im*H)
     prob = (abs.(U)).^2
     dim = 2^N
@@ -93,17 +96,20 @@ function mixing_matrix(N,beta,alpha, eta)
 end
 
 
-N = 3
+
+N = 10
 alpha = 0 
 eta = 1
-
-couplings = ones(N)
-
-# couplings[end] = 0 # OBC
+h=0
+couplings = rand(Normal(0,1),N)
 display(couplings)
-H = ising_ham(N,couplings)
-display(H)
-display(ising_energy(N, couplings,6))
+# couplings = ones(N)
+
+# # couplings[end] = 0 # OBC
+# display(couplings)
+# H = ising_ham(N,couplings,h)
+# display(H)
+
 
 
 
