@@ -7,12 +7,12 @@ include("qHMC.jl")
 beta = 5
 h=0
 
-runs = 100
-num_values = 10
+runs = 50
+num_values = 100
 alpha_values = range(0,30, length=num_values)
 eta_values = range(0,30, length=num_values)
 
-N_values = (5:5)
+N_values = (8:10)
 for N in N_values
     gap_all = zeros(num_values,num_values)
     print("\nworking on N: ", N)
@@ -25,10 +25,14 @@ for N in N_values
                 println(" Working on run = ",i)
                 couplings = rand(Normal(0,1),N)
                 M = mixing_matrix(N,couplings,h,beta,alpha_values[alpha_i], eta_values[eta_i]) 
-                # e,v  = eigen(M)
-                # gap_all[alpha_i,eta_i]= abs(1-e[end-1])
-                e,v  = eigs(M, nev = 2, which=:LM)
-                gap[i] = 1-abs(e[2])
+                try
+                    e,v  = eigs(M, nev = 2, which=:LM)
+                    gap[i] = 1-abs(e[2])
+                catch
+                    println("Arpack method out of iteration")
+                    e,v  = eigen(M)
+                    gap[i] = 1-abs(e[end-1])
+                end
             end
             gap_all[alpha_i,eta_i] = (1/runs)*sum(gap)
         end

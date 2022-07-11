@@ -97,18 +97,29 @@ end
 
 
 
-# beta = 6
-# N_values = (5:12)
-# alpha = 1
-# eta = 0.3
-# N_max = last(N_values)
-# gap_all = zeros(length(N_values))
-# for j in (1:length(N_values))
-#     N = N_values[j]
-#     println(" Working on N = ",N)
-#     M = mixing_matrix(N,beta,alpha, eta)
-#     e,v  = eigs(M, nev = 3, which=:LM)
-#     # gap_all[j] = abs(1-e[3])
-#     gap_all[j] = 1-abs(e[2])
-# end
-# save_object("Data/qHMC/alphaEtaParam/alpha1eta0.3beta6", gap_all)
+beta = 5
+N_values = (5:12)
+alpha = 1.5
+eta = 2.5
+runs = 100
+gap_all = zeros(length(N_values))
+for j in (1:length(N_values))
+    N = N_values[j]
+    println(" Working on N = ",N)
+    gap = zeros(runs)
+    for i in (1:runs)
+        println(" Working on run = ",i)
+        couplings = rand(Normal(0,1),N)
+        M = mixing_matrix(N,couplings,h,beta,alpha, eta) 
+        try
+            e,v  = eigs(M, nev = 2, which=:LM)
+            gap[i] = 1-abs(e[2])
+        catch
+            println("Arpack method out of iteration")
+            e,v  = eigen(M)
+            gap[i] = 1-abs(e[end-1])
+        end
+    end
+    gap_all[j] = (1/runs)*sum(gap)
+end
+save_object("Data/SK/qHMC/alpha1.5eta2.5beta5", gap_all)
