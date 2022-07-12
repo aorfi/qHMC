@@ -2,7 +2,7 @@ using LinearAlgebra
 using SparseArrays
 using Arpack
 using JLD2
-using PyPlot
+# using PyPlot
 using Random, Distributions
 Random.seed!(123)
 
@@ -97,11 +97,12 @@ end
 
 
 
-beta = 5
+beta = 10
 N_values = (5:12)
 alpha = 1.5
 eta = 2.5
 runs = 100
+h=0
 gap_all = zeros(length(N_values))
 for j in (1:length(N_values))
     N = N_values[j]
@@ -122,4 +123,4 @@ for j in (1:length(N_values))
     end
     gap_all[j] = (1/runs)*sum(gap)
 end
-save_object("Data/SK/qHMC/alpha1.5eta2.5beta5", gap_all)
+save_object("Data/SK/qHMC/alpha1.5eta2.5beta10", gap_all)
