@@ -8,7 +8,7 @@ num_values = 10
 name =  "Data/SK/GridSearch/100av"*string(num_values)*"N"*string(N)*"beta"*string(beta)
 gap_all= load_object(name)
 max,cord = findmax(gap_all)
-max_param = 50
+max_param = 30
 plt.title(L"qHMC Spectral Gap $\beta= $ "*string(beta)*L" $N = $"*string(N))
 # plt.imshow(gap_all,extent = [0, 30, 0 , 30], aspect="auto")
 plt.imshow(gap_all, origin="lower",extent = [0, max_param, 0 , max_param])

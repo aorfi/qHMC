@@ -5,6 +5,8 @@ using JLD2
 using PyPlot
 using Random, Distributions
 Random.seed!(123)
+include("GlauberMixingLocal.jl")
+include("GlauberMixingGeneral.jl")
 
 function ising_energy(N, couplings,h , config)
     # config is in [0,2^N] and spin in [1,N]
@@ -96,30 +98,52 @@ function mixing_matrix(N,couplings,h,beta,alpha, eta)
 end
 
 
+beta = 6
 
-beta = 5
+alpha = 0.4
+eta = 1
 N_values = (5:12)
-alpha = 1.5
-eta = 2.5
-runs = 100
-gap_all = zeros(length(N_values))
+gap = zeros(length(N_values))
 for j in (1:length(N_values))
     N = N_values[j]
     println(" Working on N = ",N)
-    gap = zeros(runs)
-    for i in (1:runs)
-        println(" Working on run = ",i)
-        couplings = rand(Normal(0,1),N)
-        M = mixing_matrix(N,couplings,h,beta,alpha, eta) 
-        try
-            e,v  = eigs(M, nev = 2, which=:LM)
-            gap[i] = 1-abs(e[2])
-        catch
-            println("Arpack method out of iteration")
-            e,v  = eigen(M)
-            gap[i] = 1-abs(e[end-1])
-        end
+    couplings = ones(N)
+    couplings[end] = 0 
+    M = mixing_matrix(N,couplings,0,beta,alpha, eta)
+    try
+        e,v  = eigs(M, nev = 2, which=:LM)
+        gap[j] = 1-abs(e[2])
+    catch
+        println("Arpack method out of iteration")
+        e,v  = eigen(M)
+        gap[j] = 1-abs(e[end-1])
     end
-    gap_all[j] = (1/runs)*sum(gap)
 end
-save_object("Data/SK/qHMC/alpha1.5eta2.5beta5", gap_all)
+save_object("Data/qHMC/alphaEtaParam/alpha"*string(alpha)*"eta"*string(eta)*"beta6", gap)
+
+# beta = 5
+# N_values = (5:12)
+# alpha = 1.5
+# eta = 2.5
+# runs = 100
+# gap_all = zeros(length(N_values))
+# for j in (1:length(N_values))
+#     N = N_values[j]
+#     println(" Working on N = ",N)
+#     gap = zeros(runs)
+#     for i in (1:runs)
+#         println(" Working on run = ",i)
+#         couplings = rand(Normal(0,1),N)
+#         M = mixing_matrix(N,couplings,h,beta,alpha, eta) 
+#         try
+#             e,v  = eigs(M, nev = 2, which=:LM)
+#             gap[i] = 1-abs(e[2])
+#         catch
+#             println("Arpack method out of iteration")
+#             e,v  = eigen(M)
+#             gap[i] = 1-abs(e[end-1])
+#         end
+#     end
+#     gap_all[j] = (1/runs)*sum(gap)
+# end
+# save_object("Data/SK/qHMC/alpha1.5eta2.5beta5", gap_all)

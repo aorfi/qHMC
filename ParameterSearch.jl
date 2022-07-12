@@ -71,7 +71,7 @@ for beta in beta_values
             # e,v  = eigen(M)
             # gap_all[alpha_i,eta_i]= abs(1-e[end-1])
             e,v  = eigs(M, nev = 2, which=:LM)
-            gap_all[eta_i] = 1-abs(e[2])
+            gap_all[alpha_i,eta_i] = 1-abs(e[2])
         end
     end
     name = "Data/GridSearch/alphaEtaParam/"*string(num_values)*"N"*string(N)*"beta"*string(beta)

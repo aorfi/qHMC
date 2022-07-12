@@ -5,12 +5,13 @@ using JLD2
 using LsqFit
 
 # # # plot gap vs N for fixed beta
-N_values = (5:13)
+N_values = (5:12)
 beta = 5
-gapMH = load_object("Data/SK/Classical/MHBeta"*string(beta))[1:9]
-gapMHl = load_object("Data/SK/Classical/MHLocBeta"*string(beta))[1:9]
-gapG = load_object("Data/SK/Classical/GlaubBeta"*string(beta))[1:9]
-gapGl = load_object("Data/SK/Classical/GlaubLocBeta"*string(beta))[1:9]
+gapMH = load_object("Data/SK/Classical/av100MHBeta"*string(beta))
+gapMHl = load_object("Data/SK/Classical/av100MHLocBeta"*string(beta))
+gapG = load_object("Data/SK/Classical/av100GlaubBeta"*string(beta))
+gapGl = load_object("Data/SK/Classical/av100GlaubLocBeta"*string(beta))
+gap = load_object("Data/SK/qHMC/alpha1.5eta2.5beta5")
 @. model(x,p) = p[1]*x+p[2]
 p0 = [-0.2,-12.0]
 
@@ -44,6 +45,8 @@ plt.scatter(N_values, gapMH, label = "MH")
 plt.scatter(N_values, gapMHl, label = "MH Local")
 # labelMHl = L"MH Local with $N^{b}$ b= "*string(scaleMHl)
 # plt.plot(x,exp.(model(log.(x),paramMHl)),linestyle = "dashed", label = labelMHl)
+N_values = (5:12)
+plt.scatter(N_values, gap, label = "qHMC")
 
 plt.title(L"Gap Scaling Comparison OBC $\beta = $"*string(beta))
 plt.ylabel(L"$\delta$")
