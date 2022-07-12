@@ -54,26 +54,52 @@ include("qHMC.jl")
 
 # 
 
-N = 5
-num_values = 200
-alpha_values = range(0,30, length=num_values)
+# N = 5
+# num_values = 200
+# alpha_values = range(0,30, length=num_values)
+# eta_values = range(0,30, length=num_values)
+# temp = 10 .^ (range(-1,stop=1,length=10))
+# beta_values = 1 ./ temp
+# for beta in beta_values
+#     gap_all = zeros(num_values)
+#     for alpha_i in (1:num_values)
+#         for eta_i in (1:num_values)
+#             print("\nworking on Beta: ", beta)
+#             print("  alpha: ", alpha_i)
+#             print("  eta: ", eta_i)
+#             M = mixing_matrix(N,beta,alpha_values[alpha_i], eta_values[eta_i])
+#             # e,v  = eigen(M)
+#             # gap_all[alpha_i,eta_i]= abs(1-e[end-1])
+#             e,v  = eigs(M, nev = 2, which=:LM)
+#             gap_all[alpha_i,eta_i] = 1-abs(e[2])
+#         end
+#     end
+#     name = "Data/GridSearch/alphaEtaParam/"*string(num_values)*"N"*string(N)*"beta"*string(beta)
+#     save_object(name, gap_all)
+# end
+
+
+N = 8
+num_values = 1000
+beta = 6
 eta_values = range(0,30, length=num_values)
-temp = 10 .^ (range(-1,stop=1,length=10))
-beta_values = 1 ./ temp
-for beta in beta_values
-    gap_all = zeros(num_values)
-    for alpha_i in (1:num_values)
-        for eta_i in (1:num_values)
-            print("\nworking on Beta: ", beta)
-            print("  alpha: ", alpha_i)
-            print("  eta: ", eta_i)
-            M = mixing_matrix(N,beta,alpha_values[alpha_i], eta_values[eta_i])
-            # e,v  = eigen(M)
-            # gap_all[alpha_i,eta_i]= abs(1-e[end-1])
-            e,v  = eigs(M, nev = 2, which=:LM)
-            gap_all[alpha_i,eta_i] = 1-abs(e[2])
-        end
+couplings = ones(N)
+couplings[end] = 0 
+gap_all = zeros(num_values)
+alpha = 0 
+for i in (1:num_values)
+    eta = eta_values[i]
+    println("  eta: ", eta)
+    M = mixing_matrix(N,couplings,0,beta,alpha, eta)
+    try
+        e,v  = eigs(M, nev = 2, which=:LM)
+        gap_all[i] = abs(1-abs(e[2]))
+    catch
+        println("Arpack method out of iteration")
+        e,v = eigen(M)
+        gap_all[i] = abs(1-abs(e[end-1]))
     end
-    name = "Data/GridSearch/alphaEtaParam/"*string(num_values)*"N"*string(N)*"beta"*string(beta)
-    save_object(name, gap_all)
 end
+
+name = "Data/GridSearch/alphaEtaParam/AlphaZero"*string(num_values)*"N"*string(N)*"beta"*string(beta)
+save_object(name, gap_all)
