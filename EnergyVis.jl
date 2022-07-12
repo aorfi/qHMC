@@ -2,6 +2,7 @@ using LinearAlgebra
 using SparseArrays
 using Arpack
 using JLD2
+using PyPlot
 using OrderedCollections
 include("qHMC.jl")
 
@@ -50,13 +51,17 @@ function mixing_ham(N)
 end
 
 N = 8
-eta = 20
-alpha = 20 
-
-H = ham(alpha, eta, N)
+eta = 20.7
+alpha = 6.45
+couplings = ones(N)
+couplings[end] = 0 
+H = ham(alpha, eta, N,couplings, 0)
 U = exp(-1im*H)
 prob = (abs.(U)).^2
 B = sort_mixing(N,prob)
+for i in (1:length(B[:,1]))
+    B[i,i] = 0
+end
 plt.title(L"Proposal Probability $N = $"*string(N)*L" $\eta =$ "*string(eta)*L" $\alpha = $ "*string(alpha))
 plt.imshow(B, origin="lower",cmap="viridis")
 bar = plt.colorbar()
@@ -66,7 +71,9 @@ plt.ylabel(L"configurations by increasing energy $\rightarrow$")
 bar.set_label("Probability")
 plt.xticks([])
 plt.yticks([])
-name = "Figures/ProposalProb/N"*string(N)*"eta"*string(eta)*"alpha"*string(alpha)*".png"
-plt.savefig(name)
+# name = "Figures/Ising/ProposalProb/N"*string(N)*"eta"*string(eta)*"alpha"*string(alpha)*".png"
+# plt.savefig(name)
 # plt.clf()
 plt.show()
+
+

@@ -31,8 +31,9 @@ p0 = [-0.2,-12.0]
 
 gapGl = load_object("Data/GlaubLoc/Old/CmpareGlaubLocOBCgapBeta6")
 gapG = load_object("Data/Glaub/Old/CompareOBCGlaubGengapBeta6")
-gap = load_object("Data/qHMC/alphaEtaParam/alpha0eta1beta6")
-gap1 = load_object("Data/qHMC/alphaEtaParam/alpha0.4eta1beta6")
+gap = load_object("Data/qHMC/alphaEtaParam/alpha0eta1.05beta6")
+gap1 = load_object("Data/qHMC/alphaEtaParam/alpha0eta1.63beta6")
+gap2 = load_object("Data/qHMC/alphaEtaParam/alpha0eta2.1beta6")
 
 N_values = (5:12)
 N_values_big = (5:15)
@@ -45,6 +46,10 @@ fit1 = curve_fit(model,N_values,log.(gap1),p0)
 param1 = fit1.param
 scale1 = -round(param1[1]/log(2), digits=4)
 
+fit2 = curve_fit(model,N_values,log.(gap2),p0)
+param2 = fit2.param
+scale2 = -round(param2[1]/log(2), digits=4)
+
 fitG = curve_fit(model,N_values_big,log.(gapG),p0)
 paramG = fitG.param
 println(paramG)
@@ -52,11 +57,11 @@ scaleG = -round(paramG[1]/log(2), digits=4)
 
 x = range(5,15, length= 1000)
 
-label_scatter = L"qHMC $\alpha = 0$ $\eta=1$ $2^{-kN}$ k= "*string(scale)
+label_scatter = L"qHMC $\alpha = 0$ $\eta=1.05$ $2^{-kN}$ k= "*string(scale)
 plt.scatter(N_values, gap, color = "tab:red")
 plt.plot(x,exp.(model(x,param )),linestyle = "dashed", label = label_scatter ,color = "tab:red")
 
-label_scatter1 = L"qHMC $\alpha = 0.4$ $\eta=1$ $2^{-kN}$ k= "*string(scale1)
+label_scatter1 = L"qHMC $\alpha = 0$ $\eta=1.63$ $2^{-kN}$ k= "*string(scale1)
 plt.scatter(N_values, gap1, color = "tab:blue")
 plt.plot(x,exp.(model(x,param1 )),linestyle = "dashed", label = label_scatter1 ,color = "tab:blue")
 
@@ -74,6 +79,10 @@ label_scatterG = L"Uniform Glauber $2^{-kN}$ k= "*string(scaleG)
 plt.scatter(N_values_big , gapG, color = "tab:orange")
 plt.plot(x,exp.(model(x,paramG)),linestyle = "dashed", label = label_scatterG,color = "tab:orange")
 
+label_scatter2 = L"qHMC $\alpha = 0$ $\eta=2.1$ $2^{-kN}$ k= "*string(scale2)
+plt.scatter(N_values, gap2, color = "tab:green")
+plt.plot(x,exp.(model(x,param2 )),linestyle = "dashed", label = label_scatter2 ,color = "tab:green")
+
 
 # label_scatterGl = L"Local Glauber $N^{b}$ b= "*string(scaleGl)
 # plt.scatter(N_values_big , gapGl, color = "tab:green")
@@ -88,6 +97,6 @@ plt.yscale("log")
 # plt.xscale("log")
 plt.grid("both","both")
 plt.legend(loc=1)
-# name = "Figures/qHMCScaling/alphaEtaParam/allChangingEta.png"
-# plt.savefig(name)
+name = "Figures/Ising/qHMCScaling/alphaEtaParam/alpha0.png"
+plt.savefig(name)
 plt.show()

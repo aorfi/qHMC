@@ -98,26 +98,25 @@ function mixing_matrix(N,couplings,h,beta,alpha, eta)
 end
 
 
-# beta = 10
-# N_values = (5:12)
-# alpha = 1.5
-# eta = 2.5
-# runs = 100
-# h=0
-# gap_all = zeros(length(N_values))
-# for j in (1:length(N_values))
-#     N = N_values[j]
-#     println(" Working on N = ",N)
-#     couplings = ones(N)
-#     couplings[end] = 0 
-#     M = mixing_matrix(N,couplings,0,beta,alpha, eta)
-#     try
-#         e,v  = eigs(M, nev = 2, which=:LM)
-#         gap_all[j] = 1-abs(e[2])
-#     catch
-#         println("Arpack method out of iteration")
-#         e,v  = eigen(M)
-#         gap_all[j] = 1-abs(e[end-1])
-#     end
-# end
-# save_object("Data/SK/qHMC/alpha1.5eta2.5beta10", gap_all)
+beta = 6
+N_values = (5:12)
+alpha = 0
+eta = 2.1
+h=0
+gap_all = zeros(length(N_values))
+for j in (1:length(N_values))
+    N = N_values[j]
+    println(" Working on N = ",N)
+    couplings = ones(N)
+    couplings[end] = 0 
+    M = mixing_matrix(N,couplings,0,beta,alpha, eta)
+    try
+        e,v  = eigs(M, nev = 2, which=:LM)
+        gap_all[j] = 1-abs(e[2])
+    catch
+        println("Arpack method out of iteration")
+        e,v  = eigen(M)
+        gap_all[j] = 1-abs(e[end-1])
+    end
+end
+save_object("Data/qHMC/alphaEtaParam/alpha"*string(alpha)*"eta"*string(eta)*"beta6", gap_all)
