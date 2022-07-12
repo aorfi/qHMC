@@ -44,7 +44,7 @@ end
 
 
 # N = 10
-# h=5
+# h=1
 # couplings = ones(N)
 # couplings[end] = 0
 # temp = 10 .^ (range(-2.5,stop=2.5,length=50))
@@ -53,12 +53,15 @@ end
 # for j in (1:length(beta_values))
 #     beta = beta_values[j]
 #     println(" Working on beta = ",beta)
-#     M = mixing(N,couplings,h,beta)
-#     e,v  = eigs(M, nev = 3, which=:LM)
-#     gap_all[j] = 1-abs(e[2])
-#     # e,v  = eigen(M)
-#     # gap_all[j]= 1-abs(e[end-1])
-#     println("Gap ", gap_all[j])
+#     M = mixing_glab_loc(N,couplings,h,beta)
+#     try
+#         e,v  = eigs(M, nev = 3, which=:LM)
+#         gap_all[j] = abs(1-abs(e[2]))
+#     catch
+#         println("Arpack out of iterations")
+#         e,v  = eigen(M)
+#         gap_all[j]= abs(1-abs(e[end-1]))
+#     end
 # end
 # save_object("Data/GlaubLoc/OBCN10h"*string(h), gap_all)
 
