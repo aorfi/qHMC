@@ -79,14 +79,13 @@ include("MHMixing.jl")
 
 
 beta = 5
-N_values = (5:12)
+N_values = (12:12)
 h=0
 runs = 100
 gap_all_glab = zeros(length(N_values))
 gap_all_glab_loc = zeros(length(N_values))
 gap_all_MH = zeros(length(N_values))
 gap_all_MH_loc = zeros(length(N_values))
-
 
 for j in (1:length(N_values))
     N = N_values[j]
@@ -139,8 +138,12 @@ for j in (1:length(N_values))
     gap_all_glab_loc[j] = (1/runs)*sum(gap_glab_loc)
     gap_all_MH[j] = (1/runs)*sum(gap_MH)
     gap_all_MH_loc[j] = (1/runs)*sum(gap_MH_loc)
-    save_object("Data/SK/Classical/av100GlaubBeta5", gap_all_glab)
-    save_object("Data/SK/Classical/av100GlaubLocBeta5", gap_all_glab_loc)
-    save_object("Data/SK/Classical/av100MHBeta5", gap_all_MH)
-    save_object("Data/SK/Classical/av100MHLocBeta5", gap_all_MH_loc)
 end
+oldG = load_object("Data/SK/Classical/av100GlaubBeta5")[1:7]
+oldGl = load_object("Data/SK/Classical/av100GlaubLocBeta5")[1:7]
+oldMH = load_object("Data/SK/Classical/av100MHBeta5")[1:7]
+oldMHl = load_object("Data/SK/Classical/av100MHLocBeta5")[1:7]
+save_object("Data/SK/Classical/av100GlaubBeta5", vcat(oldG,gap_all_glab))
+save_object("Data/SK/Classical/av100GlaubLocBeta5", vcat(oldGl,gap_all_glab_loc))
+save_object("Data/SK/Classical/av100MHBeta5", vcat(oldMH,gap_all_MH))
+save_object("Data/SK/Classical/av100MHLocBeta5", vcat(oldMHl,gap_all_MH_loc))
