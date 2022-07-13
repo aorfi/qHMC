@@ -50,30 +50,78 @@ function mixing_ham(N)
     return Hm
 end
 
-N = 8
-eta = 20.7
-alpha = 6.45
-couplings = ones(N)
-couplings[end] = 0 
-H = ham(alpha, eta, N,couplings, 0)
-U = exp(-1im*H)
-prob = (abs.(U)).^2
-B = sort_mixing(N,prob)
-for i in (1:length(B[:,1]))
-    B[i,i] = 0
+function average_prob(alpha, eta, N,couplings, h, frac)
+    H = ham(alpha, eta, N,couplings, h)
+    U = exp(-1im*H)
+    prob = (abs.(U)).^2
+    B = sort_mixing(N,prob)
+    for i in (1:length(B[:,1]))
+        B[i,i] = 0
+    end
+    cutoff = trunc(Int,length(B[:,1])/frac)
+    let
+        prob_cutoff = 0 
+        counter = 0
+        for i in (1:length(B[:,1]))
+            for j in range(1,cutoff)
+                if (i+j)<= length(B[:,1])
+                    prob_cutoff += B[i,i+j]
+                    counter += 1
+                end
+            end
+        end
+    return cutoff/counter
+    end
 end
-plt.title(L"Proposal Probability $N = $"*string(N)*L" $\eta =$ "*string(eta)*L" $\alpha = $ "*string(alpha))
-plt.imshow(B, origin="lower",cmap="viridis")
-bar = plt.colorbar()
-plt.xlabel(L"configurations by increasing energy $\rightarrow$")
-plt.ylabel(L"configurations by increasing energy $\rightarrow$")
 
-bar.set_label("Probability")
-plt.xticks([])
-plt.yticks([])
+
+# N = 8
+# eta = 6
+# alpha = 3
+# couplings = ones(N)
+# couplings[end] = 0 
+# h=0
+# H = ham(alpha, eta, N,couplings, 0)
+# U = exp(-1im*H)
+# prob = (abs.(U)).^2
+# B = sort_mixing(N,prob)
+# for i in (1:length(B[:,1]))
+#     B[i,i] = 0
+# end
+
+# plt.title(L"Proposal Probability $N = $"*string(N)*L" $\eta =$ "*string(eta)*L" $\alpha = $ "*string(alpha))
+# plt.imshow(B, origin="lower",cmap="viridis")
+# bar = plt.colorbar()
+# plt.xlabel(L"configurations by increasing energy $\rightarrow$")
+# plt.ylabel(L"configurations by increasing energy $\rightarrow$")
+
+# bar.set_label("Probability")
+# plt.xticks([])
+# plt.yticks([])
 # name = "Figures/Ising/ProposalProb/N"*string(N)*"eta"*string(eta)*"alpha"*string(alpha)*".png"
 # plt.savefig(name)
-# plt.clf()
-plt.show()
+# # plt.clf()
+# plt.show()
 
+
+
+N = 8
+num_values = 100
+beta = 6
+eta_values = range(0,30, length=num_values)
+alpha_values = range(0,30, length=num_values)
+couplings = ones(N)
+couplings[end] = 0 
+prob_all = zeros(num_values,num_values)
+
+for alpha_i in (1:num_values)
+    for eta_i in (1:num_values)
+        print("  alpha: ", alpha_i)
+        println("  eta: ", eta_i)
+        prob_all[alpha_i,eta_i] = average_prob(alpha_values[alpha_i], eta_values[eta_i], N,couplings, 0, 10)
+    end
+end
+
+name = "Data/GridSearch/alphaEtaParam/PropProp"*string(num_values)*"N"*string(N)*"beta"*string(beta)
+save_object(name, prob_all)
 
