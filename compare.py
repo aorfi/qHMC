@@ -113,7 +113,7 @@ for n in range(N):
 print(H)
 e,v = np.linalg.eig(H)
 print(e)
-print(v)
+print(v[0])
 # sx_list = qutip_tensors(N)[0]
 # p = mixing_prob(N,beta)
 # M = 0

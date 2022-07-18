@@ -29,28 +29,34 @@ include("qHMC.jl")
 # end
 
 # Get gaps for different N
-# beta = 6
-# num_values = 100
-# alpha_values = range(0,30, length=num_values)
-# eta_values = range(0,30, length=num_values)
-# N_values = (5:5)
-# for N in N_values
-#     gap_all = zeros(num_values,num_values)
-#     for alpha_i in (1:num_values)
-#         for eta_i in (1:num_values)
-#             print("\nworking on N: ", N)
-#             print("\nworking on alpha: ", alpha_i)
-#             print("  eta: ", eta_i)
-#             M = mixing_matrix(N,beta,alpha_values[alpha_i], eta_values[eta_i])
-#             # e,v  = eigen(M)
-#             # gap_all[alpha_i,eta_i]= abs(1-e[end-1])
-#             e,v  = eigs(M, nev = 2, which=:LM)
-#             gap_all[alpha_i,eta_i] = 1-abs(e[2])
-#         end
-#     end
-#     name = "Data/GridSearch/alphaEtaParam/PBC"*string(num_values)*"N"*string(N)*"beta"*string(beta)
-#     save_object(name, gap_all)
-# end
+beta = 6
+num_values = 200
+alpha_values = range(0,30, length=num_values)
+eta_values = range(0,30, length=num_values)
+couplings = ones(N)
+couplings[end] = 0 
+N_values = (3:3)
+for N in N_values
+    gap_all = zeros(num_values,num_values)
+    for alpha_i in (1:num_values)
+        for eta_i in (1:num_values)
+            print("\nworking on N: ", N)
+            print("\nworking on alpha: ", alpha_i)
+            print("  eta: ", eta_i)
+            M = mixing_matrix(N,couplings,0,beta,alpha_values[alpha_i], eta_values[eta_i])
+            try
+                e,v  = eigs(M, nev = 2, which=:LM)
+                gap_all[alpha_i,eta_i] = abs(1-abs(e[2]))
+            catch
+                println("Arpack method out of iteration")
+                e,v = eigen(M)
+                gap_all[alpha_i,eta_i] = abs(1-abs(e[end-1]))
+            end
+        end
+    end
+    name = "Data/GridSearch/alphaEtaParam/"*string(num_values)*"N"*string(N)*"beta"*string(beta)
+    save_object(name, gap_all)
+end
 
 # 
 
@@ -79,27 +85,27 @@ include("qHMC.jl")
 # end
 
 
-N = 8
-num_values = 1000
-beta = 6
-eta_values = range(0,30, length=num_values)
-couplings = ones(N)
-couplings[end] = 0 
-gap_all = zeros(num_values)
-alpha = 0 
-for i in (1:num_values)
-    eta = eta_values[i]
-    println("  eta: ", eta)
-    M = mixing_matrix(N,couplings,0,beta,alpha, eta)
-    try
-        e,v  = eigs(M, nev = 2, which=:LM)
-        gap_all[i] = abs(1-abs(e[2]))
-    catch
-        println("Arpack method out of iteration")
-        e,v = eigen(M)
-        gap_all[i] = abs(1-abs(e[end-1]))
-    end
-end
+# N = 3
+# num_values = 500
+# beta = 6
+# eta_values = range(0,10, length=num_values)
+# couplings = ones(N)
+# couplings[end] = 0 
+# gap_all = zeros(num_values)
+# alpha = 0 
+# for i in (1:num_values)
+#     eta = eta_values[i]
+#     println("  eta: ", eta)
+#     M = mixing_matrix(N,couplings,0,beta,alpha, eta)
+#     try
+#         e,v  = eigs(M, nev = 2, which=:LM)
+#         gap_all[i] = abs(1-abs(e[2]))
+#     catch
+#         println("Arpack method out of iteration")
+#         e,v = eigen(M)
+#         gap_all[i] = abs(1-abs(e[end-1]))
+#     end
+# end
 
-name = "Data/GridSearch/alphaEtaParam/AlphaZero"*string(num_values)*"N"*string(N)*"beta"*string(beta)
-save_object(name, gap_all)
+# name = "Data/GridSearch/alphaEtaParam/AlphaZero/"*string(num_values)*"N"*string(N)*"beta"*string(beta)
+# save_object(name, gap_all)
