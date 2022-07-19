@@ -97,16 +97,17 @@ function mixing_matrix(N,couplings,h,beta,alpha, eta)
     return M 
 end
 
-N=3
-alpha = 1
-couplings = ones(N)
-eta = 1
-H = ham(alpha, eta, N,couplings, 0)
-U = exp(-1im*H)
-prob = abs.(U).^2
-# display(prob)
-M = mixing_matrix(N,couplings,0,beta,alpha, eta)
-display(M)
+# N=3
+# alpha = 5
+# couplings = ones(N)
+# eta = 1
+# H = ham(alpha, eta, N,couplings, 0)
+# U = exp(-1im*H)
+# prob = abs.(U).^2
+# # display(prob)
+# beta = 6
+# M = mixing_matrix(N,couplings,0,beta,alpha, eta)
+# display(M)
 # M_glab = mixing_glab(N,couplings,0,beta)
 # display(M_glab)
 
