@@ -30,8 +30,9 @@ save_object(name, U1)
 
 name = "Data/GridSearch/alphaEtaParam/Alpha1.5"*string(num_values)*"N"*string(N)*"beta"*string(beta)
 gap = load_object(name)
-# name = "Data/GridSearch/alphaEtaParam/AlphaZero/U1"*string(num_values)*"N"*string(N)*"beta"*string(beta)
-# U1 = load_object(name)
+name = "Data/GridSearch/alphaEtaParam/AlphaZero/Alpha1.5U1"*string(num_values)*"N"*string(N)*"beta"*string(beta)
+
+U1 = load_object(name)
 
 for i in (2:2^N)
     plt.plot(eta_values,abs.(U1[i,:]).^2,linestyle= "dashed")

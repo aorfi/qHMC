@@ -100,20 +100,25 @@ def parent_ham(Hc,M,beta,N):
 
 beta = 1
 N = 2
-h = 0.1
 sz_list = qutip_tensors(N)[2]
 sx_list = qutip_tensors(N)[0]
+omega = 2*np.pi*4
+C6 = 2*np.pi * 862690
+Rb = (C6/omega)**(1/6)
+a = Rb/np.sqrt(2)
 H = 0 
-
 for n in range(N):
-    H += sx_list[n]
-
-
-# H += 0.1*sz_list[N-1]
+    H += omega/2*sx_list[n]
+for n in range(N-1):
+    H += (C6/(4*a**6))*(sz_list[n]+1)*(sz_list[n+1]+1)
 print(H)
-e,v = np.linalg.eig(H)
-print(e)
-print(v[0])
+# print((C6/(4*Rb**6))*(sz_list[n]+1)*(sz_list[n+1]+1))
+
+
+
+# e,v = np.linalg.eig(H)
+# print(e)
+# print(v[0])
 # sx_list = qutip_tensors(N)[0]
 # p = mixing_prob(N,beta)
 # M = 0
