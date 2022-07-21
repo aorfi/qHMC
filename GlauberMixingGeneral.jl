@@ -57,7 +57,7 @@ end
 #     print("Gap: ",1-abs(e[2]))
 # end
 # save_object("Data/Glaub/PBCBeta"*string(beta), gap_all)
-# beta = 5
+# beta = 6
 # N_values = (5:13)
 # h=0
 # gap_all = zeros(length(N_values))
@@ -66,7 +66,7 @@ end
 #     couplings = ones(N)
 #     couplings[end] = 0
 #     println(" Working on N = ",N)
-#     M = mixing(N,couplings,h,beta)
+#     M = mixing_glab(N,couplings,h,beta)
 #     e,v  = eigs(M, nev = 2, which=:LM)
 #     gap_all[j] = 1-abs(e[2])
 #     print("Gap: ",1-abs(e[2]))

@@ -66,34 +66,29 @@ end
 # save_object("Data/GlaubLoc/OBCN10h"*string(h), gap_all)
 
 
-# beta = 5
+
+# beta = 6
 # N_values = (5:13)
 # h=0
-# gap_all = zeros(length(N_values))
-# for j in (1:length(N_values))
-#     N = N_values[j]
-#     couplings = ones(N)
-#     # couplings[end] = 0
-#     println(" Working on N = ",N)
-#     M = mixing(N,couplings,h,beta)
-#     e,v  = eigs(M, nev = 2, which=:LM)
-#     gap_all[j] = 1-abs(e[2])
-#     print("Gap: ",1-abs(e[2]))
-# end
-# save_object("Data/GlaubLoc/PBCBeta"*string(beta), gap_all)
-# beta = 5
-# N_values = (5:13)
-# h=0
-# gap_all = zeros(length(N_values))
+# e2 = zeros(length(N_values))
+# e3 = zeros(length(N_values))
 # for j in (1:length(N_values))
 #     N = N_values[j]
 #     couplings = ones(N)
 #     couplings[end] = 0
 #     println(" Working on N = ",N)
-#     M = mixing(N,couplings,h,beta)
-#     e,v  = eigs(M, nev = 2, which=:LM)
-#     gap_all[j] = 1-abs(e[2])
-#     print("Gap: ",1-abs(e[2]))
+#     M = mixing_glab_loc(N,couplings,h,beta)
+#     try
+#         e,v  = eigs(M, nev = 3, which=:LM)
+#         e2[j] = abs(1-abs(e[2]))
+#         e3[j] = abs(1-abs(e[3]))
+#     catch
+#         println("Arpack method out of iteration")
+#         e,v = eigen(M)
+#         e2[j]  = abs(1-abs(e[end-1]))
+#         e3[j]  = abs(1-abs(e[end-2]))
+#     end
 # end
-# save_object("Data/GlaubLoc/OBCBeta"*string(beta), gap_all)
+# save_object("Data/GlaubLoc/OBCBeta"*string(beta), e2)
+# save_object("Data/GlaubLoc/OBCBeta"*string(beta)*"e3", e3)
 

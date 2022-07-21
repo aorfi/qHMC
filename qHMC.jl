@@ -111,39 +111,42 @@ end
 # M_glab = mixing_glab(N,couplings,0,beta)
 # display(M_glab)
 
-# beta = 6
-# N_values = (4:8)
-# alpha = 0
-# num_values = 500
-# eta_values = range(0,10, length=num_values)
-# h=0
+beta = 6
+N_values = (2:10)
+alpha = 0
+num_values = 500
+eta_values = range(0,10, length=num_values)
+h=0
 
-# gap_all = zeros(length(N_values),num_values)
-# for i in (1:num_values)
-#     eta = eta_values[i]
-#     println(" Working on i = ",i)
-#     for j in (1:length(N_values))
-#         N = N_values[j]
-#         println("  N = ",N)
-#         couplings = ones(N)
-#         couplings[end] = 0 
-#         M = mixing_matrix(N,couplings,0,beta,alpha, eta)
-#         try
-#             e,v  = eigs(M, nev = 2, which=:LM)
-#             gap_all[j,i] = 1-abs(e[2])
-#         catch
-#             println("Arpack method out of iteration")
-#             e,v  = eigen(M)
-#             gap_all[j,i] = 1-abs(e[end-1])
-#         end
-#     end
-# end
-# save_object("Data/qHMC/alphaEtaParam/alpha"*string(alpha)*"scalingBeta6", gap_all)
+gap_all = zeros(length(N_values), num_values)
+for i in (1:num_values)
+    eta = eta_values[i]
+    println(" Working on i = ",i)
+    for j in (1:length(N_values))
+        N = N_values[j]
+        println(" Working on N = ",N)
+        couplings = ones(N)
+        couplings[end] = 0 
+        M = mixing_matrix(N,couplings,0,beta,alpha, eta)
+        try
+            e,v  = eigs(M, nev = 2, which=:LM)
+            gap_all[j,i] = 1-abs(e[2])
+        catch
+            println("Arpack method out of iteration")
+            e,v  = eigen(M)
+            gap_all[j,i] = 1-abs(e[end-1])
+        end
+    end
+end
+save_object("Data/qHMC/alphaEtaParam/alpha"*string(alpha)*"scalingBeta6", gap_all)
+# save_object("Data/GridSearch/alphaEtaParam/AlphaZero/"*string(num_values)*"N"*string(N)*"beta"*string(beta)*"e", eigens)
+
 
 # beta = 6
 # N_values = (5:12)
 # alpha = 0
-# eta = 3.14
+# epsilon = 0.001
+# eta = pi/2+epsilon
 # h=0
 
 # gap_all = zeros(length(N_values))
@@ -164,4 +167,4 @@ end
 #     end
 # end
 
-# save_object("Data/qHMC/alphaEtaParam/alpha"*string(alpha)*"eta"*string(eta)*"beta6", gap_all)
+# save_object("Data/qHMC/alphaEtaParam/alpha"*string(alpha)*"etaPI2+"*string(epsilon)*"beta6", gap_all)
