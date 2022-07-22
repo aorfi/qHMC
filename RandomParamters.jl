@@ -51,11 +51,10 @@ N_values = (5:10)
 h=0
 num = 20
 alpha_start = 0
-alpha_end = 10
+alpha_end = 30
 eta_start = 0
-eta_end = 10
+eta_end = 30
 gap_all = zeros(length(N_values))
-
 
 for j in (1:length(N_values))
     N = N_values[j]
@@ -73,4 +72,4 @@ for j in (1:length(N_values))
     end
 end
 
-save_object("Data/qHMC/alphaEtaParam/randomTriangleBeta6", gap_all)
+save_object("Data/qHMC/alphaEtaParam/100random0-30TriangleBeta6", gap_all)
