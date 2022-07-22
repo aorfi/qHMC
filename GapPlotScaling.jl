@@ -84,39 +84,43 @@ using LsqFit
 
 
 
-# beta = 6
+beta = 6
 @. model(x,p) = p[1]*x+p[2]
 p0 = [-0.2,-12.0]
 
 gapGl = load_object("Data/GlaubLoc/OBCBeta6")
 gapG = load_object("Data/Glaub/OBCBeta6")
-gap = load_object("Data/qHMC/alphaEtaParam/alpha0eta2.9beta6")
-gap1 = load_object("Data/qHMC/alphaEtaParam/alpha0etaPI2+0.01beta6")
-gap2 = load_object("Data/qHMC/alphaEtaParam/alpha0etaPI2+0.001beta6")
+gap = load_object("Data/qHMC/alphaEtaParam/alpha0etaPI+0.01beta6e2")
+gap1 = load_object("Data/qHMC/alphaEtaParam/50random0-30TriangleBeta6e2")
+gap2 = load_object("Data/qHMC/alphaEtaParam/50random0-30TriangleBeta6e3")
 
-N_values = (5:12)
+N_values = (5:10)
 N_values_big = (5:13)
 
-fit = curve_fit(model,log.(N_values),log.(gap),p0)
-param = fit.param
-scale = round(param[1], digits=4)
+# fit = curve_fit(model,N_values,log.(gap),p0)
+# param = fit.param
+# scale = -round(param[1]/log(2), digits=4)
 
-fit1 = curve_fit(model,log.(N_values),log.(gap1),p0)
-param1 = fit1.param
-scale1 = round(param1[1], digits=4)
+# fit = curve_fit(model,log.(N_values),log.(gap),p0)
+# param = fit.param
+# scale = round(param[1], digits=4)
 
-
-fit2 = curve_fit(model,log.(N_values),log.(gap2),p0)
-param2 = fit2.param
-scale2 = round(param2[1], digits=4)
-
-# fit1 = curve_fit(model,N_values,log.(gap1),p0)
+# fit1 = curve_fit(model,log.(N_values),log.(gap1),p0)
 # param1 = fit1.param
-# scale1 = -round(param1[1]/log(2), digits=4)
+# scale1 = round(param1[1], digits=4)
 
-# fit2 = curve_fit(model,N_values,log.(gap2),p0)
+
+# fit2 = curve_fit(model,log.(N_values),log.(gap2),p0)
 # param2 = fit2.param
-# scale2 = -round(param2[1]/log(2), digits=4)
+# scale2 = round(param2[1], digits=4)
+
+fit1 = curve_fit(model,N_values[1:end-1],log.(gap1[1:end-1]),p0)
+param1 = fit1.param
+scale1 = -round(param1[1]/log(2), digits=4)
+
+fit2 = curve_fit(model,N_values,log.(gap2),p0)
+param2 = fit2.param
+scale2 = -round(param2[1]/log(2), digits=4)
 
 fitG = curve_fit(model,N_values_big,log.(gapG),p0)
 paramG = fitG.param
@@ -139,9 +143,13 @@ x = range(5,15, length= 1000)
 # plt.plot(x,exp.(model(log.(x),param1 )),linestyle = "dashed", label = label_scatterPer1 )
 
 
-label_scatter = L"$\alpha = 0$ $\eta = 2.9$ $N^{b}$ b= "*string(scale)
-plt.scatter(N_values, gap, color = "tab:blue", label = label_scatter)
+# label_scatter = L"$\alpha = 0$ $\eta = \pi + 0.01$ e[2] $N^{b}$ b= "*string(scale)
+# plt.scatter(N_values, gap, color = "tab:blue")
 # plt.plot(x,exp.(model(log.(x),param)),linestyle = "dashed", label = label_scatter,color = "tab:blue")
+
+# label_scatter = L"$\alpha = 0$ $\eta = \pi + 0.01$ e[3] $N^{b}$ b= "*string(scale1)
+# plt.scatter(N_values, gap1, color = "tab:orange")
+# plt.plot(x,exp.(model(log.(x),param1)),linestyle = "dashed", label = label_scatter,color = "tab:orange")
 
 # label_scatter1 = L"$\alpha = 0$ $\eta = \pi/2 + 0.01$ $N^{b}$ b= "*string(scale1)
 # plt.scatter(N_values, gap1, color = "tab:red")
@@ -156,14 +164,18 @@ label_scatterG = L"Uniform Glauber $2^{-kN}$ k= "*string(scaleG)
 plt.scatter(N_values_big , gapG, color = "tab:orange")
 plt.plot(x,exp.(model(x,paramG)),linestyle = "dashdot", label = label_scatterG,color = "tab:orange")
 
-# label_scatter2 = L"qHMC $\eta\in[0,10]$ $\alpha\in[0,\eta]$ $2^{-kN}$ k= "*string(scale2)
-# plt.scatter(N_values, gap2, color = "tab:red")
-# plt.plot(x,exp.(model(x,param2 )),linestyle = "dashed", label = label_scatter2 ,color = "tab:red")
+label_scatter1 = L"qHMC $\alpha\in[0,10]$ $\eta<\alpha$ e[2] $2^{-kN}$ k= "*string(scale1)
+plt.scatter(N_values, gap1, color = "tab:green")
+plt.plot(x,exp.(model(x,param1 )),linestyle = "dashed", label = label_scatter1 ,color = "tab:green")
+
+label_scatter2 = L"qHMC $\alpha\in[0,10]$ $\eta<\alpha$ e[3] $2^{-kN}$ k= "*string(scale2)
+plt.scatter(N_values, gap2, color = "tab:red")
+plt.plot(x,exp.(model(x,param2 )),linestyle = "dashed", label = label_scatter2 ,color = "tab:red")
 
 
-label_scatterGl = L"Glauber Local $N^{b}$ b= "*string(scaleGl)
-plt.scatter(N_values_big ,  gapGl, color = "tab:green")
-plt.plot(x,exp.(model(log.(x),paramGl)),linestyle = "dashed", label = label_scatterGl,color = "tab:green")
+# label_scatterGl = L"Glauber Local $N^{b}$ b= "*string(scaleGl)
+# plt.scatter(N_values_big ,  gapGl, color = "tab:green")
+# plt.plot(x,exp.(model(log.(x),paramGl)),linestyle = "dashed", label = label_scatterGl,color = "tab:green")
 
 
 
@@ -172,9 +184,9 @@ plt.title(L"Gap Scaling Comparison $\beta = $"*string(beta))
 plt.ylabel(L"$\delta$")
 plt.xlabel(L"$N$")
 plt.yscale("log")
-plt.xscale("log")
+# plt.xscale("log")
 plt.grid("both","both")
 plt.legend()
-name = "Figures/Ising/qHMCScaling/alphaEtaParam/alpha0eta2.9.png"
-plt.savefig(name)
+# name = "Figures/Ising/qHMCScaling/alphaEtaParam/alpha0etaPIe.png"
+# plt.savefig(name)
 plt.show()

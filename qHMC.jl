@@ -145,11 +145,12 @@ end
 # beta = 6
 # N_values = (5:12)
 # alpha = 0
-# epsilon = 0.001
+# epsilon = 0.01
 # eta = 2.9
 # h=0
 
-# gap_all = zeros(length(N_values))
+# e2 = zeros(length(N_values))
+# e3 = zeros(length(N_values))
 
 # for j in (1:length(N_values))
 #     N = N_values[j]
@@ -158,13 +159,16 @@ end
 #     couplings[end] = 0 
 #     M = mixing_matrix(N,couplings,0,beta,alpha, eta)
 #     try
-#         e,v  = eigs(M, nev = 2, which=:LM)
-#         gap_all[j] = 1-abs(e[2])
+#         e,v  = eigs(M, nev = 3, which=:LM)
+#         e2[j] = 1-abs(e[2])
+#         e3[j] = 1-abs(e[3])
 #     catch
 #         println("Arpack method out of iteration")
 #         e,v  = eigen(M)
-#         gap_all[j] = 1-abs(e[end-1])
+#         e2[j] = 1-abs(e[end-1])
+#         e3[j] = 1-abs(e[end-2])
 #     end
 # end
 
-# save_object("Data/qHMC/alphaEtaParam/alpha"*string(alpha)*"eta+"*string(eta)*"beta6", gap_all)
+# save_object("Data/qHMC/alphaEtaParam/alpha"*string(alpha)*"eta"*string(eta)*"beta6e2", e2)
+# save_object("Data/qHMC/alphaEtaParam/alpha"*string(alpha)*"eta"*string(eta)*"beta6e3", e3)

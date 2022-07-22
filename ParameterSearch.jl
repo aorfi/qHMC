@@ -85,14 +85,14 @@ include("qHMC.jl")
 # end
 
 
-N = 8
+N = 3
 num_values = 500
 beta = 6
 eta_values = range(0,10, length=num_values)
 couplings = ones(N)
 couplings[end] = 0 
 gap_all = zeros(num_values)
-alpha = 1.5 
+alpha = 0.75 
 for i in (1:num_values)
     eta = eta_values[i]
     println("  eta: ", eta)
@@ -107,5 +107,5 @@ for i in (1:num_values)
     end
 end
 
-name = "Data/GridSearch/alphaEtaParam/Alpha1.5"*string(num_values)*"N"*string(N)*"beta"*string(beta)
+name = "Data/GridSearch/alphaEtaParam/Alpha0.75-"*string(num_values)*"N"*string(N)*"beta"*string(beta)
 save_object(name, gap_all)
